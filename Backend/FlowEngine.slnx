@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/Src/" />
+  <Folder Name="/Src/Core/">
+    <Project Path="Src/Core/FlowEngine.Application/FlowEngine.Application.csproj" />
+    <Project Path="Src/Core/FlowEngine.Domain/FlowEngine.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Src/Infrastructure/">
+    <Project Path="Src/Infrastructure/FlowEngine.Infrastructure.Identity/FlowEngine.Infrastructure.Identity.csproj" />
+    <Project Path="Src/Infrastructure/FlowEngine.Infrastructure.Persistence/FlowEngine.Infrastructure.Persistence.csproj" />
+    <Project Path="Src/Infrastructure/FlowEngine.Infrastructure.Resources/FlowEngine.Infrastructure.Resources.csproj" />
+    <Project Path="Src/Infrastructure/FlowEngine.Infrastructure.Worker/FlowEngine.Infrastructure.Worker.csproj" Id="721fe468-8eb0-467e-91f4-9c697a416811" />
+  </Folder>
+  <Folder Name="/Src/Presentation/">
+    <Project Path="Src/Presentation/FlowEngine.WebApi/FlowEngine.WebApi.csproj" />
+  </Folder>
+</Solution>
