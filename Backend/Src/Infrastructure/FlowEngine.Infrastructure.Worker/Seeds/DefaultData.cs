@@ -71,5 +71,47 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                 ]
             };
         }
+        internal static Project GetTestTemplate3()
+        {
+            return new Project("Test3")
+            {
+                Jobs = [
+                    new Job_Timer()
+                    {
+                        Name="Start",
+                        NextJob=["Random"],
+                    }.UpdateJobParameter(FlowEngineConst.IntervalMs,"5000"),
+                    
+                    new Job_Random()
+                    {
+                        Name="Random",
+                        NextJob=["If"],
+
+                    }.UpdateJobParameter(FlowEngineConst.From,"0")
+                     .UpdateJobParameter(FlowEngineConst.To,"1000"),
+
+                    new Job_If()
+                    {
+                        Name="If",
+                    }.UpdateJobParameter(FlowEngineConst.Expression,"${Random} >= 500")
+                     .UpdateJobParameter(FlowEngineConst.True,"HttpRequest1")
+                     .UpdateJobParameter(FlowEngineConst.False,"HttpRequest2"),
+
+
+                    new Job_HttpRequest()
+                    {
+                        Name="HttpRequest1",
+                    }.UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/GetJson"),
+
+                    new Job_HttpRequest()
+                    {
+                        Name="HttpRequest2",
+                    }
+                    .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/PostJson")
+                    .UpdateJobParameter(FlowEngineConst.Method,"Post")
+                    .UpdateJobParameter(FlowEngineConst.Body,"{\"Number\": ${Random}}"),
+                ]
+            };
+        }
     }
 }

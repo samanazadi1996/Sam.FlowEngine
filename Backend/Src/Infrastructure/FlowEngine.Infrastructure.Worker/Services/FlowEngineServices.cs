@@ -102,6 +102,9 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
         if (templateName == "Test2")
             project = DefaultData.GetTestTemplate2();
 
+        if (templateName == "Test3")
+            project = DefaultData.GetTestTemplate3();
+
         if (project is not null)
         {
             await projectRepository.AddAsync(project);

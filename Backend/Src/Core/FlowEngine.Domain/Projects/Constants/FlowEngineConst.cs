@@ -13,5 +13,6 @@
         public const string Body = "Body";
         public const string Method = "Method";
         public const string ResponseType = "ResponseType";
+        public const string Expression = "Expression";
     }
 }
