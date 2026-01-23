@@ -3,6 +3,7 @@ using FlowEngine.Application.Wrappers;
 using FlowEngine.WebApi.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using System.Collections.Generic;
 
 namespace FlowEngine.WebApi.Endpoints;
 
@@ -11,6 +12,8 @@ public class TestEndpoint : EndpointGroupBase
     public override void Map(RouteGroupBuilder builder)
     {
         builder.MapGet(GetJson);
+
+        builder.MapPost(PostJson);
     }
 
     BaseResult<object> GetJson(string parameter)
@@ -21,6 +24,14 @@ public class TestEndpoint : EndpointGroupBase
             Number = RandomHelper.RandomInt(1, 5000),
             Boolean = RandomHelper.RandomBool(),
             Parameter = parameter
+        });
+    }
+
+    BaseResult<object> PostJson(object data)
+    {
+        return BaseResult<object>.Ok(new
+        {
+            Data = data
         });
     }
 }

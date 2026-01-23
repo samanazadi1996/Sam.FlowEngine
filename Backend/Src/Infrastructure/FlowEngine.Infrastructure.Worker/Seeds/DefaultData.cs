@@ -52,13 +52,22 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                     new Job_Timer()
                     {
                         Name="Start",
-                        NextJob=["HttpRequest"],
+                        NextJob=["HttpRequest1"],
                     }.UpdateJobParameter(FlowEngineConst.IntervalMs,"10000"),
                     new Job_HttpRequest()
                     {
-                        Name="HttpRequest",
-
+                        Name="HttpRequest1",
+                        NextJob=["HttpRequest2"],
                     }.UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/GetJson"),
+
+                    new Job_HttpRequest()
+                    {
+                        Name="HttpRequest2",
+
+                    }
+                    .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/PostJson")
+                    .UpdateJobParameter(FlowEngineConst.Method,"Post")
+                    .UpdateJobParameter(FlowEngineConst.Body,"{\"Number\": ${HttpRequest1.Data.data.number}}"),
                 ]
             };
         }

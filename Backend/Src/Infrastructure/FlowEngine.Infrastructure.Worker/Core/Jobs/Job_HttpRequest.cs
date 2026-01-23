@@ -1,6 +1,8 @@
 ﻿using FlowEngine.Domain.Projects.Constants;
 using FlowEngine.Domain.Projects.Enums;
 using FlowEngine.Infrastructure.Worker.Helpers;
+using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
 
@@ -29,7 +31,10 @@ public sealed class Job_HttpRequest : IJob
 
         var client = new HttpClient();
 
-        var request = new HttpRequestMessage(method, url);
+        var request = new HttpRequestMessage(method, url)
+        {
+            Content = string.IsNullOrEmpty(body) ? null : new StringContent(body, Encoding.UTF8, "application/json")
+        };
 
         HttpResponseMessage response = await client.SendAsync(request);
 
