@@ -1,5 +1,4 @@
-﻿using FlowEngine.Domain.Projects.Entities;
-using FlowEngine.Domain.Projects.Enums;
+﻿using FlowEngine.Domain.Projects.Enums;
 using System.Collections.Generic;
 
 namespace FlowEngine.Domain.Projects.ValueObjects

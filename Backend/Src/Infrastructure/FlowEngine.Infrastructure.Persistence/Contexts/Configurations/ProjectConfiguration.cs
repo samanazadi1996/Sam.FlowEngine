@@ -23,7 +23,7 @@ namespace FlowEngine.Infrastructure.Persistence.Contexts.Configurations
             builder.Property(p => p.Jobs)
                 .HasConversion(
                 v => JsonSerializer.Serialize(v),
-                v => JsonSerializer.Deserialize< List<ProjectJob>>(v) ?? new List<ProjectJob>()
+                v => JsonSerializer.Deserialize<List<ProjectJob>>(v) ?? new List<ProjectJob>()
                 );
 
         }

@@ -2,6 +2,7 @@
 using FlowEngine.Domain.Projects.Enums;
 using FlowEngine.Infrastructure.Worker.Helpers;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace FlowEngine.Infrastructure.Worker.Core.Jobs;
 
@@ -12,10 +13,10 @@ public sealed class Job_HttpRequest : IJob
         ClassName = this.GetType().FullName!;
         JobParameters = new()
         {
-            { FlowEngineConst.Method,new(JobParameterType.JobParameter_HttpResuest_MethodType,JobParameter_HttpResuest_MethodType.Get.ToString())},
+            { FlowEngineConst.Method,new(JobParameterType.JobParameter_HttpResuest_MethodType,nameof(JobParameter_HttpResuest_MethodType.Get))},
             { FlowEngineConst.Url,new(JobParameterType.String)},
             { FlowEngineConst.Body,new(JobParameterType.String)},
-            { FlowEngineConst.ResponseType,new(JobParameterType.JobParameter_HttpResuest_ResponseType,JobParameter_HttpResuest_ResponseType.Json.ToString())},
+            { FlowEngineConst.ResponseType,new(JobParameterType.JobParameter_HttpResuest_ResponseType,nameof(JobParameter_HttpResuest_ResponseType.Json))},
         };
     }
 
@@ -23,6 +24,7 @@ public sealed class Job_HttpRequest : IJob
     {
         var url = projectModel.GetValue(JobParameters, FlowEngineConst.Url);
         var body = projectModel.GetValue(JobParameters, FlowEngineConst.Body);
+        var responseType = projectModel.GetValue(JobParameters, FlowEngineConst.ResponseType);
         var method = GetHttpMethod(projectModel);
 
         var client = new HttpClient();
@@ -31,17 +33,64 @@ public sealed class Job_HttpRequest : IJob
 
         HttpResponseMessage response = await client.SendAsync(request);
 
+        var responseContent = await response.Content.ReadAsStringAsync();
+
         projectModel.Data ??= [];
-        projectModel.Data[this.Name] = JsonSerializer.Serialize(new
+
+        projectModel.Data[this.Name] = Enum.Parse<JobParameter_HttpResuest_ResponseType>(responseType) switch
         {
-            Status = (int)response.StatusCode,
-            Data = JsonSerializer.Deserialize<object>(await response.Content.ReadAsStringAsync())
-        });
+            JobParameter_HttpResuest_ResponseType.Json => BuildJsonResponse(response, responseContent),
+            JobParameter_HttpResuest_ResponseType.Xml => BuildXmlResponse(response, responseContent),
+            JobParameter_HttpResuest_ResponseType.Text => BuildTextResponse(response, responseContent),
+            _ => BuildTextResponse(response, responseContent)
+        };
 
         ConsoleLogger.Log($"Send HttpRequest {(int)response.StatusCode} {url}");
 
         await GotoNextJob(projectModel, this.NextJob);
     }
+
+
+    private string BuildJsonResponse(HttpResponseMessage response, string data)
+    {
+        return JsonSerializer.Serialize(new
+        {
+            Status = (int)response.StatusCode,
+            Data = JsonSerializer.Deserialize<object>(data)
+        });
+    }
+
+    private string BuildXmlResponse(HttpResponseMessage response, string data)
+    {
+        XElement dataElement;
+
+        try
+        {
+            dataElement = XElement.Parse(data);
+        }
+        catch
+        {
+            dataElement = new XElement("Raw", new XCData(data));
+        }
+
+        var document = new XDocument(
+            new XElement("Response",
+                new XElement("Status", (int)response.StatusCode),
+                new XElement("Data", dataElement)
+            )
+        );
+
+        return document.ToString(SaveOptions.DisableFormatting);
+    }
+    private string BuildTextResponse(HttpResponseMessage response, string data)
+    {
+        return JsonSerializer.Serialize(new
+        {
+            Status = (int)response.StatusCode,
+            Data = data
+        });
+    }
+
     private HttpMethod GetHttpMethod(ProjectModel projectModel)
     {
         var methodName = projectModel.GetValue(JobParameters, FlowEngineConst.Method);

@@ -19,18 +19,18 @@ namespace FlowEngine.WebApi.Endpoints
 
         BaseResult<Dictionary<int, string>> GetErrorCodes()
             => Enum.GetValues<ErrorCode>().ToDictionary(t => (int)t, t => t.ToString());
-        BaseResult<Dictionary<string, Dictionary<string,string>>> GetDomainEnums()
+        BaseResult<Dictionary<string, Dictionary<string, string>>> GetDomainEnums()
         {
-            
-            var assembly=typeof(BaseEntity).Assembly;
 
-           var data= assembly.GetTypes().Where(p => p.IsEnum).Select(p =>new
-           {
-               Name=p.Name,
-               Data=           Enum.GetValues(p).Cast<Enum>().ToDictionary(t => t.ToString(), t => t.ToString())
-           }
-           );
-            return data.ToDictionary(p=>p.Name,x=>x.Data);
+            var assembly = typeof(BaseEntity).Assembly;
+
+            var data = assembly.GetTypes().Where(p => p.IsEnum).Select(p => new
+            {
+                Name = p.Name,
+                Data = Enum.GetValues(p).Cast<Enum>().ToDictionary(t => t.ToString(), t => t.ToString())
+            }
+            );
+            return data.ToDictionary(p => p.Name, x => x.Data);
         }
 
     }

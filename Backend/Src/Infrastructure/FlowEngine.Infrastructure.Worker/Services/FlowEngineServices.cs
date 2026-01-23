@@ -22,7 +22,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
 
     public async Task LoadData(string projectName)
     {
-        var files = await projectRepository.GetAllAsync(new Guid(authenticatedUser.UserId??Guid.Empty.ToString()), projectName);
+        var files = await projectRepository.GetAllAsync(new Guid(authenticatedUser.UserId ?? Guid.Empty.ToString()), projectName);
         foreach (var data in files)
         {
             var temp = new ProjectModel(data.ProjectName)

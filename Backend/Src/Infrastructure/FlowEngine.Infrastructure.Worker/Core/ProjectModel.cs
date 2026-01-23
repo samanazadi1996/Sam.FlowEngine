@@ -1,7 +1,6 @@
 ﻿using FlowEngine.Domain.Projects.Entities;
 using FlowEngine.Infrastructure.Worker.Core.Jobs;
 using FlowEngine.Infrastructure.Worker.Helpers;
-using System.Threading.Tasks;
 
 namespace FlowEngine.Infrastructure.Worker.Core;
 
@@ -24,7 +23,7 @@ public class ProjectModel(string name) : Project(name)
              {
                  try
                  {
-                    await job.Execute(this);
+                     await job.Execute(this);
                  }
                  catch (Exception ex)
                  {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FlowEngine.Domain.Projects.Enums
+﻿namespace FlowEngine.Domain.Projects.Enums
 {
     public enum JobParameterType
     {
@@ -22,14 +18,9 @@ namespace FlowEngine.Domain.Projects.Enums
     public enum JobParameter_HttpResuest_ResponseType
     {
         Json,
+        Xml,
         Html,
-        Csv,
-        @Int,
-        @String,
-        @Bool,
-        @Long,
-        @Double,
-        @Float,
+        Text,
     }
     public enum JobParameter_HttpResuest_MethodType
     {

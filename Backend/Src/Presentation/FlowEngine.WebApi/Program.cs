@@ -1,6 +1,5 @@
 using FlowEngine.Application;
 using FlowEngine.Application.Interfaces;
-using FlowEngine.Application.Interfaces.Repositories;
 using FlowEngine.Infrastructure.Identity;
 using FlowEngine.Infrastructure.Identity.Contexts;
 using FlowEngine.Infrastructure.Identity.Models;
@@ -10,7 +9,6 @@ using FlowEngine.Infrastructure.Persistence.Contexts;
 using FlowEngine.Infrastructure.Persistence.Seeds;
 using FlowEngine.Infrastructure.Resources;
 using FlowEngine.Infrastructure.Worker;
-using FlowEngine.Infrastructure.Worker.Services;
 using FlowEngine.WebApi.Infrastructure.Extensions;
 using FlowEngine.WebApi.Infrastructure.Middlewares;
 using FlowEngine.WebApi.Infrastructure.Services;
@@ -59,7 +57,7 @@ using (var scope = app.Services.CreateScope())
     await DefaultRoles.SeedAsync(services.GetRequiredService<RoleManager<ApplicationRole>>());
     await DefaultBasicUser.SeedAsync(services.GetRequiredService<UserManager<ApplicationUser>>());
     await DefaultData.SeedAsync(services.GetRequiredService<ApplicationDbContext>());
-    
+
     await services.GetRequiredService<IFlowEngineServices>().LoadData("*");
 }
 

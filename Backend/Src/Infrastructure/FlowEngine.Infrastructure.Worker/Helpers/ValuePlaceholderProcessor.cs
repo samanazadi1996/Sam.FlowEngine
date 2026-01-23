@@ -25,7 +25,7 @@ internal static class ValuePlaceholderProcessor
                 {
                     if (projectModel.Data is not null && projectModel.Data.TryGetValue(dicKey, out var data))
                     {
-                        if (new string[] { "Int", "Long", "String", "Bool" }.Contains(responseType.Value))
+                        if (new string[] { "Int", "Long", "String", "Bool", "Text" }.Contains(responseType.Value))
                         {
                             temp = temp.Replace(match.Value, data.ToString());
                         }

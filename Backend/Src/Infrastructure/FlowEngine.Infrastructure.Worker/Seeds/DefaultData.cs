@@ -20,7 +20,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                     {
                         Name="HttpRequest",
                         NextJob=["Random"],
-                    }.UpdateJobParameter(FlowEngineConst.Url,"https://www.arvancloud.ir/api/v1/notice-banner"),
+                    }.UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/GetJson"),
                     new Job_Random()
                     {
                         Name="Random",
@@ -39,7 +39,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                     {
                         Name="HttpRequest2",
                         NextJob=["Random"]
-                    }.UpdateJobParameter(FlowEngineConst.Url,"https://www.arvancloud.ir/api/v1/notice-banner?z=${HttpRequest.Data.data}"),
+                    }.UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/GetJson?parameter=${HttpRequest.Data.data.number}"),
 
                     ]
             };
@@ -58,7 +58,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                     {
                         Name="HttpRequest",
 
-                    }.UpdateJobParameter(FlowEngineConst.Url,"https://www.arvancloud.ir/api/v1/notice-banner"),
+                    }.UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/GetJson"),
                 ]
             };
         }
