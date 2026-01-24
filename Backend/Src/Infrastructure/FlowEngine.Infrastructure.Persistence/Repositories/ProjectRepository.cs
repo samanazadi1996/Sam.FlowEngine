@@ -25,18 +25,16 @@ namespace FlowEngine.Infrastructure.Persistence.Repositories
         //        pageSize);
 
         //}
-        public async Task<List<Project>> GetAllAsync(Guid userId, string projectName)
+        public async Task<List<Project>> GetAllAsync(Guid? userId, string projectName)
         {
             var query = dbContext.Projects.AsQueryable();
 
+            if (userId is not null)
+                query = query.Where(p => p.CreatedBy == userId);
 
-            if (projectName != "*")
-            {
-                query = query
-                    .Where(p => p.ProjectName == projectName)
-                    .Where(p => p.CreatedBy == userId);
 
-            }
+            if (projectName != "*" && !string.IsNullOrEmpty(projectName))
+                query = query.Where(p => p.ProjectName == projectName);
 
             return await query.ToListAsync();
 

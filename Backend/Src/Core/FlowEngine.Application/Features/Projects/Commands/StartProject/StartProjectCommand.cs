@@ -1,7 +1,7 @@
 using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Wrappers;
 
-namespace FlowEnginex.Application.Features.Projects.Commands.StartProject;
+namespace FlowEngine.Application.Features.Projects.Commands.StartProject;
 
 public class StartProjectCommand : IRequest<BaseResult>
 {

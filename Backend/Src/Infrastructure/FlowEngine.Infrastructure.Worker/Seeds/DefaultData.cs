@@ -16,16 +16,17 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                         Name="Start",
                         NextJob=["HttpRequest"],
                     },
+
                     new Job_HttpRequest()
                     {
                         Name="HttpRequest",
                         NextJob=["Random"],
                     }.UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/GetJson"),
+                    
                     new Job_Random()
                     {
                         Name="Random",
                         NextJob=["Sleep"],
-
                     }.UpdateJobParameter(FlowEngineConst.From,"100")
                      .UpdateJobParameter(FlowEngineConst.To,"1000"),
 
@@ -54,6 +55,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                         Name="Start",
                         NextJob=["HttpRequest1"],
                     }.UpdateJobParameter(FlowEngineConst.IntervalMs,"10000"),
+
                     new Job_HttpRequest()
                     {
                         Name="HttpRequest1",
@@ -81,7 +83,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                         Name="Start",
                         NextJob=["Random"],
                     }.UpdateJobParameter(FlowEngineConst.IntervalMs,"5000"),
-                    
+
                     new Job_Random()
                     {
                         Name="Random",

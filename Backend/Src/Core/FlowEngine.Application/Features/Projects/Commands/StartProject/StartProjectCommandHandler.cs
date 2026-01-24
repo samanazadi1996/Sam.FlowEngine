@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FlowEnginex.Application.Features.Projects.Commands.StartProject;
+namespace FlowEngine.Application.Features.Projects.Commands.StartProject;
 
 public class StartProjectCommandHandler(IFlowEngineServices flowEngine, IAuthenticatedUserService authenticatedUser, IUnitOfWork unitOfWork, IProjectRepository projectRepository) : IRequestHandler<StartProjectCommand, BaseResult>
 {
