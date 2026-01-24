@@ -12,7 +12,7 @@ public sealed class Job_Timer : IJob
         JobParameters = new()
         {
             { FlowEngineConst.IntervalMs,new(JobParameterType.Int,"1")},
-            
+
             { FlowEngineConst.EnvironmentVariables,new(JobParameterType.String,"")},
         };
     }

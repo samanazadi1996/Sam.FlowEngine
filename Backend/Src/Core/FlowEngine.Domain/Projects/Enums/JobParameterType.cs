@@ -15,6 +15,7 @@
         JobParameter_EnvironmentVariable_DataType,
 
         JobParameter_Execute,
+        List,
     }
     public enum JobParameter_HttpResuest_ResponseType
     {

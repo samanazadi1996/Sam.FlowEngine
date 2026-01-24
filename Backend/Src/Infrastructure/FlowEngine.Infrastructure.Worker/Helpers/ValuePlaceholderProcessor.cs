@@ -19,27 +19,24 @@ internal static class ValuePlaceholderProcessor
             {
                 var rep = match.Groups[1].Value;
                 var dicKey = rep.Split(".")[0];
-                var job = projectModel.Jobs.FirstOrDefault(p => p.Name == dicKey);
-                if (job is not null)
+
+                if (projectModel.Data is not null && projectModel.Data.TryGetValue(dicKey, out var data))
                 {
-
-                    if (projectModel.Data is not null && projectModel.Data.TryGetValue(dicKey, out var data))
+                    var responseType = DataTypeExtensions.DetectFormat(data);
+                    if (responseType == DataTypeExtensions.Text)
                     {
-                        var responseType = DataTypeExtensions.DetectFormat(data);
-                        if (responseType == DataTypeExtensions.Text)
-                        {
-                            temp = temp.Replace(match.Value, data);
-                        }
-                        if (responseType == DataTypeExtensions.Json)
-                        {
-                            var parts = match.Groups[1].Value.Split('.', StringSplitOptions.RemoveEmptyEntries);
+                        temp = temp.Replace(match.Value, data);
+                    }
+                    if (responseType == DataTypeExtensions.Json)
+                    {
+                        var parts = match.Groups[1].Value.Split('.', StringSplitOptions.RemoveEmptyEntries);
 
-                            using var doc = JsonDocument.Parse(data);
-                            var replacement = GetJsonValue(doc.RootElement, [.. parts.Skip(1)]);
-                            temp = temp.Replace(match.Value, replacement);
-                        }
+                        using var doc = JsonDocument.Parse(data);
+                        var replacement = GetJsonValue(doc.RootElement, [.. parts.Skip(1)]);
+                        temp = temp.Replace(match.Value, replacement);
                     }
                 }
+
             }
         }
         catch (Exception)

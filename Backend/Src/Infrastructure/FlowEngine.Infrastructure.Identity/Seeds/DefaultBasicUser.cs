@@ -20,7 +20,7 @@ namespace FlowEngine.Infrastructure.Identity.Seeds
                 PhoneNumberConfirmed = true
             };
 
-            if (!await userManager.Users.AnyAsync())
+            if (!await userManager.Users.AnyAsync(p => p.UserName == defaultUser.UserName))
             {
                 var user = await userManager.FindByEmailAsync(defaultUser.Email);
                 if (user == null)
@@ -39,7 +39,7 @@ namespace FlowEngine.Infrastructure.Identity.Seeds
                 PhoneNumberConfirmed = true
             };
 
-            if (!await userManager.Users.AnyAsync())
+            if (!await userManager.Users.AnyAsync(p => p.UserName == defaultUser2.UserName))
             {
                 var user = await userManager.FindByEmailAsync(defaultUser2.Email);
                 if (user == null)

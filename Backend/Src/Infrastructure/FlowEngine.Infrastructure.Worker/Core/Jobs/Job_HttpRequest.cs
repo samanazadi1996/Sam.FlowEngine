@@ -17,6 +17,7 @@ public sealed class Job_HttpRequest : IJob
             { FlowEngineConst.Method,new(JobParameterType.JobParameter_HttpResuest_MethodType,nameof(JobParameter_HttpResuest_MethodType.Get))},
             { FlowEngineConst.Url,new(JobParameterType.String)},
             { FlowEngineConst.Body,new(JobParameterType.String)},
+            { FlowEngineConst.Headers,new(JobParameterType.List)},
         };
     }
 
@@ -24,6 +25,7 @@ public sealed class Job_HttpRequest : IJob
     {
         var url = projectModel.GetValue(JobParameters, FlowEngineConst.Url);
         var body = projectModel.GetValue(JobParameters, FlowEngineConst.Body);
+        var headers = projectModel.GetValue(JobParameters, FlowEngineConst.Headers);
         var method = GetHttpMethod(projectModel);
 
         var client = new HttpClient();
@@ -33,12 +35,28 @@ public sealed class Job_HttpRequest : IJob
             Content = string.IsNullOrEmpty(body) ? null : new StringContent(body, Encoding.UTF8, "application/json")
         };
 
+        if (!string.IsNullOrWhiteSpace(headers))
+        {
+            foreach (var line in headers.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var index = line.IndexOf(':');
+                if (index <= 0) continue;
+
+                var key = line[..index].Trim();
+                var value = line[(index + 1)..].Trim();
+
+                if (!request.Headers.TryAddWithoutValidation(key, value))
+                {
+                    request.Content?.Headers.TryAddWithoutValidation(key, value);
+                }
+            }
+        }
+
         HttpResponseMessage response = await client.SendAsync(request);
 
         var responseContent = await response.Content.ReadAsStringAsync();
 
         projectModel.Data ??= [];
-
         projectModel.Data[this.Name] = DataTypeExtensions.DetectFormat(responseContent) switch
         {
             DataTypeExtensions.Json => BuildJsonResponse(response, responseContent),

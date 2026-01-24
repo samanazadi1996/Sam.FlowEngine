@@ -15,5 +15,7 @@
         public const string Body = "Body";
         public const string Method = "Method";
         public const string Expression = "Expression";
+
+        public const string Headers = "Headers";
     }
 }

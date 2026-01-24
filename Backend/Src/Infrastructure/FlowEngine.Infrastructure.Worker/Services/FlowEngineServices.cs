@@ -26,7 +26,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
         var files = await projectRepository.GetAllAsync(
             string.IsNullOrEmpty(authenticatedUser.UserId) ? null : new Guid(authenticatedUser.UserId),
             projectName);
-        
+
         foreach (var data in files)
         {
             var temp = new ProjectModel(data.ProjectName)
@@ -108,6 +108,9 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
 
         if (templateName == "Test3")
             project = DefaultData.GetTestTemplate3();
+
+        if (templateName == "Test4")
+            project = DefaultData.GetTestTemplate4();
 
         if (project is not null)
         {

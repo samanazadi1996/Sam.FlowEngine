@@ -13,9 +13,10 @@ public class TestEndpoint : EndpointGroupBase
         builder.MapGet(GetJson);
 
         builder.MapPost(PostJson);
+        builder.MapPost(PostJsonRequireAuthorization).RequireAuthorization();
     }
 
-    BaseResult<object> GetJson(string parameter)
+    object GetJson(string parameter)
     {
         return BaseResult<object>.Ok(new
         {
@@ -30,6 +31,16 @@ public class TestEndpoint : EndpointGroupBase
     {
         return BaseResult<object>.Ok(new
         {
+            Authorization = false,
+            Data = data
+        });
+    }
+
+    BaseResult<object> PostJsonRequireAuthorization(object data)
+    {
+        return BaseResult<object>.Ok(new
+        {
+            Authorization = true,
             Data = data
         });
     }

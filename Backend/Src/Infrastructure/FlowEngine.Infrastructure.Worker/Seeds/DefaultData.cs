@@ -22,7 +22,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                         Name="HttpRequest",
                         NextJob=["Random"],
                     }.UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/GetJson"),
-                    
+
                     new Job_Random()
                     {
                         Name="Random",
@@ -112,6 +112,40 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                     .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/PostJson")
                     .UpdateJobParameter(FlowEngineConst.Method,"Post")
                     .UpdateJobParameter(FlowEngineConst.Body,"{\"Number\": ${Random}}"),
+                ]
+            };
+        }
+        internal static Project GetTestTemplate4()
+        {
+            return new Project("Test4")
+            {
+                Jobs = [
+                    new Job_Timer()
+                    {
+                        Name="Start",
+                        NextJob=["HttpRequest_Authenticate"],
+                    }
+                    .UpdateJobParameter(FlowEngineConst.IntervalMs,"5000")
+                    .UpdateJobParameter(FlowEngineConst.EnvironmentVariables,"{\r\n    \"User\": \"Test\",\r\n    \"Pass\":\"Test@12345\"\r\n}"),
+
+
+                    new Job_HttpRequest()
+                    {
+                        Name="HttpRequest_Authenticate",
+                        NextJob=["HttpRequest_PostJsonRequireAuthorization"]
+                    }
+                    .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Account/Authenticate")
+                    .UpdateJobParameter(FlowEngineConst.Method,"Post")
+                    .UpdateJobParameter(FlowEngineConst.Body,"{\r\n  \"userName\": \"${EnvironmentVariables.User}\",\r\n  \"password\": \"${EnvironmentVariables.Pass}\"\r\n}"),
+
+                    new Job_HttpRequest()
+                    {
+                        Name="HttpRequest_PostJsonRequireAuthorization",
+                    }
+                    .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/PostJsonRequireAuthorization")
+                    .UpdateJobParameter(FlowEngineConst.Method,"Post")
+                    .UpdateJobParameter(FlowEngineConst.Body,"{\"Number\": 123456}")
+                    .UpdateJobParameter(FlowEngineConst.Headers,"Authorization:bearer ${HttpRequest_Authenticate.Data.data.jwToken}"),
                 ]
             };
         }

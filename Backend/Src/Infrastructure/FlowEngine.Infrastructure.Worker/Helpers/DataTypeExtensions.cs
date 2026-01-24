@@ -30,7 +30,7 @@ public static class DataTypeExtensions
     {
         try
         {
-            JsonDocument.Parse(input);
+            JsonSerializer.Deserialize<object>(input);
             return true;
         }
         catch
