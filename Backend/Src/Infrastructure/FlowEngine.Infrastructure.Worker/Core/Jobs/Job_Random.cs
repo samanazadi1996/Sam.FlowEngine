@@ -13,7 +13,6 @@ public sealed class Job_Random : IJob
         {
             { FlowEngineConst.From,new(JobParameterType.Int,"0")},
             { FlowEngineConst.To,new(JobParameterType.Int,"1")},
-            { FlowEngineConst.ResponseType,new(JobParameterType.String,"Int")}
         };
     }
 
@@ -28,7 +27,7 @@ public sealed class Job_Random : IJob
 
         var value = rnd.Next(from, to);
         projectModel.Data ??= [];
-        projectModel.Data[this.Name] = value;
+        projectModel.Data[this.Name] = value.ToString();
 
         ConsoleLogger.Log($"Generate RandoNumber {value}");
 

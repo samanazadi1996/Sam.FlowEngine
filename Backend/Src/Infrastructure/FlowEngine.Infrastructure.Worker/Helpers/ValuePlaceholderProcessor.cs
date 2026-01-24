@@ -1,5 +1,4 @@
-﻿using FlowEngine.Domain.Projects.Constants;
-using FlowEngine.Domain.Projects.ValueObjects;
+﻿using FlowEngine.Domain.Projects.ValueObjects;
 using FlowEngine.Infrastructure.Worker.Core;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -21,19 +20,21 @@ internal static class ValuePlaceholderProcessor
                 var rep = match.Groups[1].Value;
                 var dicKey = rep.Split(".")[0];
                 var job = projectModel.Jobs.FirstOrDefault(p => p.Name == dicKey);
-                if (job is not null && job.JobParameters.TryGetValue(FlowEngineConst.ResponseType, out var responseType))
+                if (job is not null)
                 {
+
                     if (projectModel.Data is not null && projectModel.Data.TryGetValue(dicKey, out var data))
                     {
-                        if (new string[] { "Int", "Long", "String", "Bool", "Text" }.Contains(responseType.Value))
+                        var responseType = DataTypeExtensions.DetectFormat(data);
+                        if (responseType == DataTypeExtensions.Text)
                         {
-                            temp = temp.Replace(match.Value, data.ToString());
+                            temp = temp.Replace(match.Value, data);
                         }
-                        if (responseType.Value == "Json")
+                        if (responseType == DataTypeExtensions.Json)
                         {
                             var parts = match.Groups[1].Value.Split('.', StringSplitOptions.RemoveEmptyEntries);
 
-                            using var doc = JsonDocument.Parse(data.ToString()!);
+                            using var doc = JsonDocument.Parse(data);
                             var replacement = GetJsonValue(doc.RootElement, [.. parts.Skip(1)]);
                             temp = temp.Replace(match.Value, replacement);
                         }
@@ -46,6 +47,7 @@ internal static class ValuePlaceholderProcessor
         }
 
         return temp;
+
         string? GetJsonValue(JsonElement element, string[] path)
         {
             JsonElement current = element;

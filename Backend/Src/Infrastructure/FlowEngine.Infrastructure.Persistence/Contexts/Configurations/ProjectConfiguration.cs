@@ -17,7 +17,7 @@ namespace FlowEngine.Infrastructure.Persistence.Contexts.Configurations
             builder.Property(p => p.Data)
                 .HasConversion(
                 v => JsonSerializer.Serialize(v),
-                v => JsonSerializer.Deserialize<Dictionary<string, object>>(v) ?? new Dictionary<string, object>()
+                v => JsonSerializer.Deserialize<Dictionary<string, string>>(v) ?? new Dictionary<string, string>()
                 );
 
             builder.Property(p => p.Jobs)

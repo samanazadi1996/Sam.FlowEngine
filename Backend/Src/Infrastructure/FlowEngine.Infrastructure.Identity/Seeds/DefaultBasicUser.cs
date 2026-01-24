@@ -28,6 +28,25 @@ namespace FlowEngine.Infrastructure.Identity.Seeds
                     await userManager.CreateAsync(defaultUser, "Sam@12345");
                 }
             }
+
+            var defaultUser2 = new ApplicationUser
+            {
+                UserName = "Test",
+                Email = "Test@Admin.com",
+                Name = "Test",
+                PhoneNumber = "09123654789",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true
+            };
+
+            if (!await userManager.Users.AnyAsync())
+            {
+                var user = await userManager.FindByEmailAsync(defaultUser2.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(defaultUser2, "Test@12345");
+                }
+            }
         }
     }
 }

@@ -12,6 +12,7 @@
 
         JobParameter_HttpResuest_ResponseType,
         JobParameter_HttpResuest_MethodType,
+        JobParameter_EnvironmentVariable_DataType,
 
         JobParameter_Execute,
     }
@@ -20,6 +21,12 @@
         Json,
         Xml,
         Html,
+        Text,
+    }
+    public enum JobParameter_EnvironmentVariable_DataType
+    {
+        Json,
+        Xml,
         Text,
     }
     public enum JobParameter_HttpResuest_MethodType

@@ -16,7 +16,7 @@ namespace FlowEngine.Domain.Projects.Entities
             //BarCode = barCode;
         }
         public string ProjectName { get; set; }
-        public Dictionary<string, object>? Data { get; set; }
+        public Dictionary<string, string>? Data { get; set; }
         public List<ProjectJob>? Jobs { get; set; }
         public bool Started { get; set; }
     }

@@ -17,7 +17,6 @@ public sealed class Job_HttpRequest : IJob
             { FlowEngineConst.Method,new(JobParameterType.JobParameter_HttpResuest_MethodType,nameof(JobParameter_HttpResuest_MethodType.Get))},
             { FlowEngineConst.Url,new(JobParameterType.String)},
             { FlowEngineConst.Body,new(JobParameterType.String)},
-            { FlowEngineConst.ResponseType,new(JobParameterType.JobParameter_HttpResuest_ResponseType,nameof(JobParameter_HttpResuest_ResponseType.Json))},
         };
     }
 
@@ -25,7 +24,6 @@ public sealed class Job_HttpRequest : IJob
     {
         var url = projectModel.GetValue(JobParameters, FlowEngineConst.Url);
         var body = projectModel.GetValue(JobParameters, FlowEngineConst.Body);
-        var responseType = projectModel.GetValue(JobParameters, FlowEngineConst.ResponseType);
         var method = GetHttpMethod(projectModel);
 
         var client = new HttpClient();
@@ -41,11 +39,11 @@ public sealed class Job_HttpRequest : IJob
 
         projectModel.Data ??= [];
 
-        projectModel.Data[this.Name] = Enum.Parse<JobParameter_HttpResuest_ResponseType>(responseType) switch
+        projectModel.Data[this.Name] = DataTypeExtensions.DetectFormat(responseContent) switch
         {
-            JobParameter_HttpResuest_ResponseType.Json => BuildJsonResponse(response, responseContent),
-            JobParameter_HttpResuest_ResponseType.Xml => BuildXmlResponse(response, responseContent),
-            JobParameter_HttpResuest_ResponseType.Text => BuildTextResponse(response, responseContent),
+            DataTypeExtensions.Json => BuildJsonResponse(response, responseContent),
+            DataTypeExtensions.Xml => BuildXmlResponse(response, responseContent),
+            DataTypeExtensions.Text => BuildTextResponse(response, responseContent),
             _ => BuildTextResponse(response, responseContent)
         };
 

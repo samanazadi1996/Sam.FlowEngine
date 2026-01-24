@@ -11,7 +11,9 @@ public sealed class Job_Timer : IJob
         ClassName = this.GetType().FullName!;
         JobParameters = new()
         {
-            { FlowEngineConst.IntervalMs,new(JobParameterType.Int,"1")}
+            { FlowEngineConst.IntervalMs,new(JobParameterType.Int,"1")},
+            
+            { FlowEngineConst.EnvironmentVariables,new(JobParameterType.String,"")},
         };
     }
 
@@ -20,6 +22,10 @@ public sealed class Job_Timer : IJob
         var interval = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.IntervalMs));
 
         ConsoleLogger.Log($"Run Timer with {interval}");
+
+        projectModel.Data = [];
+        projectModel.Data[FlowEngineConst.EnvironmentVariables] = projectModel.GetValue(JobParameters, FlowEngineConst.EnvironmentVariables);
+
         while (projectModel.Started)
         {
             ConsoleLogger.Log($"Timer with {interval} Executed");
