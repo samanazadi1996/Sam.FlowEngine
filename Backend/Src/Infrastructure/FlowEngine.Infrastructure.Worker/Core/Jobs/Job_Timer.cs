@@ -19,20 +19,27 @@ public sealed class Job_Timer : IJob
 
     public override async Task Execute(ProjectModel projectModel)
     {
-        var interval = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.IntervalMs));
-
-        ConsoleLogger.Log($"Run Timer with {interval}");
-
-        projectModel.Data = [];
-        projectModel.Data[FlowEngineConst.EnvironmentVariables] = projectModel.GetValue(JobParameters, FlowEngineConst.EnvironmentVariables);
-
-        while (projectModel.Started)
+        try
         {
-            ConsoleLogger.Log($"Timer with {interval} Executed");
+            var interval = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.IntervalMs));
 
-            await GotoNextJob(projectModel, this.NextJob);
+            ConsoleLogger.Log($"Run Timer with {interval}");
 
-            Thread.Sleep(interval);
+            projectModel.Data = [];
+            projectModel.Data[FlowEngineConst.EnvironmentVariables] = projectModel.GetValue(JobParameters, FlowEngineConst.EnvironmentVariables);
+
+            while (projectModel.Started)
+            {
+                ConsoleLogger.Log($"Timer with {interval} Executed");
+
+                await GotoNextJob(projectModel, this.NextJob);
+
+                Thread.Sleep(interval);
+            }
+        }
+        catch (Exception ex)
+        {
+            ConsoleLogger.LogError(ex.Message);
         }
     }
 }

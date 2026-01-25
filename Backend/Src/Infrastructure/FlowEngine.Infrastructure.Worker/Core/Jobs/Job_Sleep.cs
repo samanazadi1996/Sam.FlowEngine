@@ -18,13 +18,22 @@ public sealed class Job_Sleep : IJob
 
     public override async Task Execute(ProjectModel projectModel)
     {
-        var sleepTimeMs = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.SleepTimeMs));
+        try
+        {
 
-        ConsoleLogger.Log($"Sleep {sleepTimeMs} ms");
+            var sleepTimeMs = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.SleepTimeMs));
 
-        Thread.Sleep(sleepTimeMs);
+            ConsoleLogger.Log($"Sleep {sleepTimeMs} ms");
 
-        await GotoNextJob(projectModel, this.NextJob);
+            Thread.Sleep(sleepTimeMs);
+
+            await GotoNextJob(projectModel, this.NextJob);
+
+        }
+        catch (Exception ex)
+        {
+            ConsoleLogger.LogError(ex.Message);
+        }
 
     }
 }

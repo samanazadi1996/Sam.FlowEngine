@@ -19,18 +19,26 @@ public sealed class Job_Random : IJob
 
     public override async Task Execute(ProjectModel projectModel)
     {
-        var from = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.From));
+        try
+        {
+            var from = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.From));
 
-        var to = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.To));
+            var to = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.To));
 
-        var rnd = new Random();
+            var rnd = new Random();
 
-        var value = rnd.Next(from, to);
-        projectModel.Data ??= [];
-        projectModel.Data[this.Name] = value.ToString();
+            var value = rnd.Next(from, to);
+            projectModel.Data ??= [];
+            projectModel.Data[this.Name] = value.ToString();
 
-        ConsoleLogger.Log($"Generate RandoNumber {value}");
+            ConsoleLogger.Log($"Generate RandoNumber {value}");
+            
+            await GotoNextJob(projectModel, this.NextJob);
+        }
+        catch (Exception ex)
+        {
+            ConsoleLogger.LogError(ex.Message);
+        }
 
-        await GotoNextJob(projectModel, this.NextJob);
     }
 }

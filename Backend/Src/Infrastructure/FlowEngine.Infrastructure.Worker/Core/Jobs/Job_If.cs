@@ -19,25 +19,33 @@ public sealed class Job_If : IJob
     }
     public override async Task Execute(ProjectModel projectModel)
     {
-        string nextJob = "";
-
-        var expression = projectModel.GetValue(JobParameters, FlowEngineConst.Expression);
-
-        if (EvaluateBoolExpression(expression))
+        try
         {
-            var t = projectModel.GetValue(JobParameters, FlowEngineConst.True);
-            if (!string.IsNullOrEmpty(t))
-                nextJob = t;
 
+            string nextJob = "";
+
+            var expression = projectModel.GetValue(JobParameters, FlowEngineConst.Expression);
+
+            if (EvaluateBoolExpression(expression))
+            {
+                var t = projectModel.GetValue(JobParameters, FlowEngineConst.True);
+                if (!string.IsNullOrEmpty(t))
+                    nextJob = t;
+
+            }
+            else
+            {
+                var f = projectModel.GetValue(JobParameters, FlowEngineConst.False);
+                if (!string.IsNullOrEmpty(f))
+                    nextJob = f;
+            }
+
+            await GotoNextJob(projectModel, [.. (this.NextJob ?? []).Union([nextJob])]);
         }
-        else
+        catch (Exception ex)
         {
-            var f = projectModel.GetValue(JobParameters, FlowEngineConst.False);
-            if (!string.IsNullOrEmpty(f))
-                nextJob = f;
+            ConsoleLogger.LogError(ex.Message);
         }
-
-        await GotoNextJob(projectModel, [.. (this.NextJob ?? []).Union([nextJob])]);
     }
 
     public static bool EvaluateBoolExpression(string expression)

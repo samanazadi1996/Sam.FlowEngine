@@ -17,13 +17,24 @@ public sealed class Job_Start : IJob
 
     public override async Task Execute(ProjectModel projectModel)
     {
-        ConsoleLogger.Log($"Start");
+        try
+        {
+            ConsoleLogger.Log($"Start");
 
-        projectModel.Data = [];
+            projectModel.Data = [];
 
-        projectModel.Data[FlowEngineConst.EnvironmentVariables] = projectModel.GetValue(JobParameters, FlowEngineConst.EnvironmentVariables);
+            projectModel.Data[FlowEngineConst.EnvironmentVariables] = projectModel.GetValue(JobParameters, FlowEngineConst.EnvironmentVariables);
 
-        await GotoNextJob(projectModel, this.NextJob);
+        }
+        catch (Exception ex)
+        {
+            ConsoleLogger.LogError(ex.Message);
+        }
+        finally
+        {
+            await GotoNextJob(projectModel, this.NextJob);
+        }
+
     }
 }
 
