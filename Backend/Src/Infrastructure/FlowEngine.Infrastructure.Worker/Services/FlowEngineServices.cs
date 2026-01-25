@@ -1,8 +1,10 @@
 ﻿using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Interfaces.Repositories;
 using FlowEngine.Domain.Projects.Entities;
+using FlowEngine.Domain.Projects.ValueObjects;
 using FlowEngine.Infrastructure.Worker.Core;
 using FlowEngine.Infrastructure.Worker.Seeds;
+using System.Reflection;
 
 namespace FlowEngine.Infrastructure.Worker.Services;
 
@@ -120,5 +122,19 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
 
             await LoadData(project.ProjectName);
         }
+    }
+
+    public List<ProjectJob> GetAllJobs()
+    {
+        List<ProjectJob> result = [];
+        var jobs = Assembly.GetAssembly(typeof(IJob))!.GetTypes().Where(p => p.BaseType == typeof(IJob));
+
+        foreach (var item in jobs)
+        {
+            var job = Activator.CreateInstance(item)! as IJob;
+
+            result.Add(job);
+        }
+        return result;
     }
 }

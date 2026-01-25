@@ -1,3 +1,5 @@
+using FlowEngine.Domain.Projects.ValueObjects;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FlowEngine.Application.Interfaces
@@ -8,7 +10,9 @@ namespace FlowEngine.Application.Interfaces
         Task Stop(string projectName);
 
         Task LoadData(string projectName);
-        Task Save(string projectName);
         Task CteateTemplate(string templateName);
+
+
+        List<ProjectJob> GetAllJobs();
     }
 }
