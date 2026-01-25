@@ -144,7 +144,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                     }
                     .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/PostJsonRequireAuthorization")
                     .UpdateJobParameter(FlowEngineConst.Method,"Post")
-                    .UpdateJobParameter(FlowEngineConst.Body,"{\"Number\": 123456}")
+                    .UpdateJobParameter(FlowEngineConst.Body,"{\"Number\": 123456,\"Date\":\"${DateTime.Now}\"}")
                     .UpdateJobParameter(FlowEngineConst.Headers,"Authorization:bearer ${HttpRequest_Authenticate.Data.data.jwToken}"),
                 ]
             };

@@ -8,5 +8,6 @@ namespace FlowEngine.Application.Wrappers
         AccessDenied = 3,
         ErrorInIdentity = 4,
         Exception = 5,
+        DuplicateData = 6,
     }
 }

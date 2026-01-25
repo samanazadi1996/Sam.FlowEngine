@@ -1,7 +1,6 @@
 using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Wrappers;
 using FlowEngine.Domain.Projects.ValueObjects;
-using FlowEngine.Infrastructure.Worker.Core;
 using FlowEngine.WebApi.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;

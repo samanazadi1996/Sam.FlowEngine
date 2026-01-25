@@ -1,5 +1,6 @@
 using FlowEngine.Application.Wrappers;
 using FlowEngine.Domain.Common;
+using FlowEngine.Infrastructure.Worker.Helpers;
 using FlowEngine.WebApi.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
@@ -15,6 +16,7 @@ namespace FlowEngine.WebApi.Endpoints
         {
             builder.MapGet(GetErrorCodes);
             builder.MapGet(GetDomainEnums);
+            builder.MapGet(ValuePlaceholderProcessorReplacements);
         }
 
         BaseResult<Dictionary<int, string>> GetErrorCodes()
@@ -32,6 +34,8 @@ namespace FlowEngine.WebApi.Endpoints
             );
             return data.ToDictionary(p => p.Name, x => x.Data);
         }
+        BaseResult<Dictionary<string, string>> ValuePlaceholderProcessorReplacements()
+            => ValuePlaceholderProcessor.GetReplacements();
 
     }
 }
