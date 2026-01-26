@@ -28,7 +28,7 @@ public abstract class IJob : ProjectJob
             if (jobs != null)
             {
                 ConsoleLogger.Log($"Run Job {item}");
-                await jobs.Execute(projectModel);
+                Task.Run(async () => await jobs.Execute(projectModel));
             }
 
         }

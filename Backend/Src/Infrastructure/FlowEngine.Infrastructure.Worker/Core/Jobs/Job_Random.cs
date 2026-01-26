@@ -32,7 +32,7 @@ public sealed class Job_Random : IJob
             projectModel.Data[this.Name] = value.ToString();
 
             ConsoleLogger.Log($"Generate RandoNumber {value}");
-            
+
             await GotoNextJob(projectModel, this.NextJob);
         }
         catch (Exception ex)
