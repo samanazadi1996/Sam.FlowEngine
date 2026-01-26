@@ -2,12 +2,13 @@
 using FlowEngine.Infrastructure.Worker.Core;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace FlowEngine.Infrastructure.Worker.Helpers;
 
 public static class ValuePlaceholderProcessor
 {
-    public static string GetValue(this ProjectModel projectModel, Dictionary<string, JobParameter> jobParameters, string parameterName)
+    public static string? GetValue(this ProjectModel projectModel, Dictionary<string, JobParameter> jobParameters, string parameterName)
     {
         var temp = jobParameters[parameterName]?.Value;
         if (string.IsNullOrEmpty(temp))
@@ -29,7 +30,7 @@ public static class ValuePlaceholderProcessor
                     {
                         temp = temp.Replace(match.Value, data);
                     }
-                    if (responseType == DataTypeExtensions.Json)
+                    else if (responseType == DataTypeExtensions.Json)
                     {
                         var parts = match.Groups[1].Value.Split('.', StringSplitOptions.RemoveEmptyEntries);
 
@@ -37,6 +38,15 @@ public static class ValuePlaceholderProcessor
                         var replacement = GetJsonValue(doc.RootElement, [.. parts.Skip(1)]);
                         temp = temp.Replace(match.Value, replacement);
                     }
+                    else if (responseType == DataTypeExtensions.Xml)
+                    {
+                        var parts = match.Groups[1].Value.Split('.', StringSplitOptions.RemoveEmptyEntries);
+
+                        var doc = XDocument.Parse(data);
+                        var replacement = GetXmlValue(doc.Root!, [.. parts.Skip(1)]);
+                        temp = temp.Replace(match.Value, replacement);
+                    }
+
                 }
 
             }
@@ -95,6 +105,40 @@ public static class ValuePlaceholderProcessor
                 JsonValueKind.False => "false",
                 _ => current.GetRawText()
             };
+        }
+
+        string? GetXmlValue(XElement element, string[] path)
+        {
+            XElement? current = element;
+
+            foreach (var p in path)
+            {
+                if (current == null)
+                    return null;
+
+                if (p.StartsWith("@"))
+                {
+                    return current.Attribute(p[1..])?.Value;
+                }
+
+                if (p.EndsWith("]") && p.Contains("["))
+                {
+                    var idxStart = p.IndexOf('[');
+                    var name = p[..idxStart];
+                    var idxStr = p.Substring(idxStart + 1, p.Length - idxStart - 2);
+
+                    if (!int.TryParse(idxStr, out var index))
+                        return null;
+
+                    current = current.Elements(name).ElementAtOrDefault(index);
+                }
+                else
+                {
+                    current = current.Element(p);
+                }
+            }
+
+            return current?.Value;
         }
 
 
