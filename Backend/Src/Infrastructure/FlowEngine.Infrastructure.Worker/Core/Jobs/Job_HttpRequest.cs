@@ -91,14 +91,7 @@ public sealed class Job_HttpRequest : IJob
     {
         XElement dataElement;
 
-        try
-        {
-            dataElement = XElement.Parse(data);
-        }
-        catch
-        {
-            dataElement = new XElement("Raw", new XCData(data));
-        }
+        dataElement = XElement.Parse(data);
 
         var document = new XDocument(
             new XElement("Response",
@@ -122,18 +115,6 @@ public sealed class Job_HttpRequest : IJob
     {
         var methodName = projectModel.GetValue(JobParameters, FlowEngineConst.Method);
 
-        return Enum.Parse<JobParameter_HttpResuest_MethodType>(methodName) switch
-        {
-            JobParameter_HttpResuest_MethodType.Get => HttpMethod.Get,
-            JobParameter_HttpResuest_MethodType.Post => HttpMethod.Post,
-            JobParameter_HttpResuest_MethodType.Put => HttpMethod.Put,
-            JobParameter_HttpResuest_MethodType.Delete => HttpMethod.Delete,
-
-            JobParameter_HttpResuest_MethodType.Patch => HttpMethod.Patch,
-            JobParameter_HttpResuest_MethodType.Options => HttpMethod.Options,
-            JobParameter_HttpResuest_MethodType.Head => HttpMethod.Head,
-
-            _ => HttpMethod.Get,
-        };
+        return HttpMethod.Parse(methodName);
     }
 }
