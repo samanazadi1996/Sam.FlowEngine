@@ -1,0 +1,4 @@
+﻿
+    FunctionName(TRequest) {
+        return this.http.put<TResponse>(`${environment.serverUrl}EndpointUrl`, BodyModel);
+    }

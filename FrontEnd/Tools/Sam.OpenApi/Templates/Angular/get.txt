@@ -1,0 +1,7 @@
+﻿
+    FunctionName(TRequest) {
+
+        let params = new HttpParams();
+        ParamsModel
+        return this.http.get<TResponse>(`${environment.serverUrl}EndpointUrl`, { params });
+    }
