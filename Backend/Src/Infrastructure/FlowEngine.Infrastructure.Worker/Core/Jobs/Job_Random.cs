@@ -11,8 +11,8 @@ public sealed class Job_Random : IJob
         ClassName = this.GetType().FullName!;
         JobParameters = new()
         {
-            { FlowEngineConst.From,new(JobParameterType.Int,"0")},
-            { FlowEngineConst.To,new(JobParameterType.Int,"1")},
+            { FlowEngineConst.From,"0"},
+            { FlowEngineConst.To,"1" },
         };
     }
 

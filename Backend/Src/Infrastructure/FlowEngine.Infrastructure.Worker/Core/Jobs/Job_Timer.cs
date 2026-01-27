@@ -11,9 +11,9 @@ public sealed class Job_Timer : IJob
         ClassName = this.GetType().FullName!;
         JobParameters = new()
         {
-            { FlowEngineConst.IntervalMs,new(JobParameterType.Int,"1")},
+            { FlowEngineConst.IntervalMs,"3000"},
 
-            { FlowEngineConst.EnvironmentVariables,new(JobParameterType.String,"")},
+            { FlowEngineConst.EnvironmentVariables,""},
         };
     }
 

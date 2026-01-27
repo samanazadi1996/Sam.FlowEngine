@@ -14,11 +14,11 @@ public sealed class Job_HttpRequest : IJob
         ClassName = this.GetType().FullName!;
         JobParameters = new()
         {
-            { FlowEngineConst.Method,new(JobParameterType.JobParameter_HttpResuest_MethodType,nameof(JobParameter_HttpResuest_MethodType.Get))},
-            { FlowEngineConst.Url,new(JobParameterType.String)},
-            { FlowEngineConst.Body,new(JobParameterType.String)},
-            { FlowEngineConst.Headers,new(JobParameterType.List)},
-        };
+            { FlowEngineConst.Method,nameof(JobParameter_HttpResuest_MethodType.Get)},
+            { FlowEngineConst.Url,null},
+            { FlowEngineConst.Body,null},
+            { FlowEngineConst.Headers,null},
+        }; 
     }
 
     public override async Task Execute(ProjectModel projectModel)

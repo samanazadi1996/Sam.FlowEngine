@@ -8,9 +8,9 @@ namespace FlowEngine.Infrastructure.Worker.Helpers;
 
 public static class ValuePlaceholderProcessor
 {
-    public static string GetValue(this ProjectModel projectModel, Dictionary<string, JobParameter> jobParameters, string parameterName)
+    public static string GetValue(this ProjectModel projectModel, Dictionary<string, string?> jobParameters, string parameterName)
     {
-        var temp = jobParameters[parameterName]?.Value;
+        var temp = jobParameters[parameterName];
         if (string.IsNullOrEmpty(temp))
             return temp;
         try

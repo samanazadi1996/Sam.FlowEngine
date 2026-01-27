@@ -33,7 +33,6 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
         {
             var temp = new ProjectModel(data.ProjectName)
             {
-                Data = data.Data,
                 Started = false,
                 Jobs = []
             };
@@ -47,7 +46,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
                 if (j.JobParameters is not null)
                 {
                     foreach (var item in j.JobParameters)
-                        job.UpdateJobParameter(item.Key, item.Value.Value);
+                        job.UpdateJobParameter(item.Key, item.Value);
                 }
 
                 temp.Jobs.Add(job);

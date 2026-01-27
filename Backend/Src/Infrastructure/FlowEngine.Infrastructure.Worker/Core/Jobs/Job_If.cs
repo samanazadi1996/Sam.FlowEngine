@@ -12,9 +12,9 @@ public sealed class Job_If : IJob
         ClassName = this.GetType().FullName!;
         JobParameters = new()
         {
-            { FlowEngineConst.Expression,new(JobParameterType.String)},
-            { FlowEngineConst.True,new(JobParameterType.JobParameter_Execute)},
-            { FlowEngineConst.False,new(JobParameterType.JobParameter_Execute)},
+            { FlowEngineConst.Expression,null},
+            { FlowEngineConst.True,null},
+            { FlowEngineConst.False,null},
         };
     }
     public override async Task Execute(ProjectModel projectModel)

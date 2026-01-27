@@ -1,22 +1,5 @@
 ﻿namespace FlowEngine.Domain.Projects.Enums
 {
-    public enum JobParameterType
-    {
-        //@FromData,
-        @Int,
-        @String,
-        @Bool,
-        @Long,
-        @Double,
-        @Float,
-
-        JobParameter_HttpResuest_ResponseType,
-        JobParameter_HttpResuest_MethodType,
-        JobParameter_EnvironmentVariable_DataType,
-
-        JobParameter_Execute,
-        List,
-    }
     public enum JobParameter_HttpResuest_ResponseType
     {
         Json,
@@ -40,5 +23,10 @@
         Patch,
         Options,
         Head,
+
+        Query,
+        Connect,
+        Trace,
+
     }
 }

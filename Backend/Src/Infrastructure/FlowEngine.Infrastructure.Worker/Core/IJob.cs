@@ -11,7 +11,7 @@ public abstract class IJob : ProjectJob
         if (JobParameters != null)
             if (JobParameters.TryGetValue(key, out var _))
             {
-                JobParameters[key].Value = value;
+                JobParameters[key] = value;
             }
         return this;
     }

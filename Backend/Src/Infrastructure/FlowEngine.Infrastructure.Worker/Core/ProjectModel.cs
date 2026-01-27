@@ -6,6 +6,8 @@ namespace FlowEngine.Infrastructure.Worker.Core;
 
 public class ProjectModel(string name) : Project(name)
 {
+    public Dictionary<string, string>? Data { get; set; }
+
     public List<IJob> Jobs { get; set; }
 
     public void Start()

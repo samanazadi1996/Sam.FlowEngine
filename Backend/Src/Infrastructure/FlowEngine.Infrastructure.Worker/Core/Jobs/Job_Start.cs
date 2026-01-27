@@ -11,7 +11,7 @@ public sealed class Job_Start : IJob
         ClassName = this.GetType().FullName!;
         JobParameters = new()
         {
-            { FlowEngineConst.EnvironmentVariables,new(JobParameterType.String,"")},
+            { FlowEngineConst.EnvironmentVariables,""},
         };
     }
 

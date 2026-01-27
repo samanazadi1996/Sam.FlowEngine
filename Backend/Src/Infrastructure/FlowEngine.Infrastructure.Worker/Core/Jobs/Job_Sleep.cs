@@ -11,7 +11,7 @@ public sealed class Job_Sleep : IJob
         ClassName = this.GetType().FullName!;
         JobParameters = new()
         {
-            { FlowEngineConst.SleepTimeMs,new(JobParameterType.Int,"100")}
+            { FlowEngineConst.SleepTimeMs,"100"}
         };
     }
 
