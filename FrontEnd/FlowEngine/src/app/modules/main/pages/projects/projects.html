@@ -1,0 +1,86 @@
+<div class="page-header">
+    <div class="page-header-left d-flex align-items-center">
+        <div class="page-header-title">
+            <h5 class="m-b-10">Projects</h5>
+        </div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">Main</li>
+            <li class="breadcrumb-item">Projects</li>
+        </ul>
+    </div>
+    <div class="page-header-right ms-auto">
+        <div class="page-header-right-items">
+            <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+                <a href="projects-create.html" class="btn btn-primary">
+                    <i class="feather-plus me-2"></i>
+                    <span>Create Prject</span>
+                </a>
+            </div>
+        </div>
+        <div class="d-md-none d-flex align-items-center">
+            <a href="javascript:void(0)" class="page-header-right-open-toggle">
+                <i class="feather-align-right fs-20"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="collapseOne" class="accordion-collapse collapse page-header-collapse">
+    <div class="accordion-body pb-2">
+        <div class="row">
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card stretch stretch-full">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Project Name</th>
+                                    <th class="hstack gap-2 justify-content-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(data){
+
+                                @for (item of data; track $index) {
+                                <tr class="single-item">
+                                    <td class="project-name-td">
+                                        <div class="hstack gap-4">
+                                            <div>
+                                                <a href="projects-view.html" class="text-truncate-1-line">
+                                                    {{item?.projectName}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button (click)="stopStart(item)" class="btn btn-primary btn-icon">
+                                                <i class="feather" [class.feather-pause]="item.started"
+                                                    [class.feather-play]="!item.started"></i>
+                                            </button>
+                                            <a class="btn btn-primary btn-icon"
+                                                [routerLink]="[item.projectName]">
+                                                <i class="feather feather-eye"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
