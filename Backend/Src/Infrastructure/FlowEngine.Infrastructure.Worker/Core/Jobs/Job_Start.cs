@@ -19,7 +19,7 @@ public sealed class Job_Start : IJob
     {
         try
         {
-            ConsoleLogger.Log($"Start");
+            ConsoleLogger.Log(this.Name);
 
             projectModel.Data = [];
 

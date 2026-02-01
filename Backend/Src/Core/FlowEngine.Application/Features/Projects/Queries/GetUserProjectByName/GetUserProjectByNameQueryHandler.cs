@@ -16,6 +16,6 @@ public class GetUserProjectByNameQueryHandler(IProjectRepository projectReposito
     {
         var data = await projectRepository.GetByNameAsync(new Guid(authenticatedUser.UserId), request.ProjectName);
 
-        return data;
+        return ProjectDto.Parse(data);
     }
 }

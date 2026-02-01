@@ -1,9 +1,13 @@
 using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Wrappers;
+using FlowEngine.Domain.Projects.DTOs;
 using FlowEngine.Domain.Projects.Entities;
 using FlowEngine.WebApi.Infrastructure.Extensions;
+using FlowEnginex.Application.Features.Jobs.Commands.UpdateJob;
 using FlowEnginex.Application.Features.Jobs.Commands.UpdatePositionJob;
+using FlowEnginex.Application.Features.Jobs.Queries.GetJobById;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,16 +21,25 @@ public class JobEndpoint : EndpointGroupBase
 
         builder.MapGet(GetAllJobs).RequireAuthorization();
 
+        builder.MapGet(GetJobById).RequireAuthorization();
+
         builder.MapPut(UpdatePositionJob).RequireAuthorization();
+
+        builder.MapPut(UpdateJob).RequireAuthorization();
     }
 
 
     BaseResult<List<ProjectJob>> GetAllJobs(IFlowEngineServices flowEngine)
         => flowEngine.GetAllJobs();
 
+    async Task<BaseResult<ProjectJobDto>> GetJobById(IMediator mediator,[AsParameters] GetJobByIdQuery model)
+        => await mediator.Send<GetJobByIdQuery, BaseResult<ProjectJobDto>>(model);
 
     async Task<BaseResult> UpdatePositionJob(IMediator mediator, UpdatePositionJobCommand model)
         => await mediator.Send<UpdatePositionJobCommand, BaseResult>(model);
+
+    async Task<BaseResult> UpdateJob(IMediator mediator, UpdateJobCommand model)
+        => await mediator.Send<UpdateJobCommand, BaseResult>(model);
 
 
 }

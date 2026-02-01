@@ -1,11 +1,48 @@
 ﻿using FlowEngine.Domain.Projects.Entities;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace FlowEngine.Domain.Projects.DTOs
 {
     public class ProjectDto
     {
+        public static List<ProjectDto> Parse(List<Project> proj)
+        {
+            return proj.Select(p => new ProjectDto()
+            {
+                Id = p.Id,
+                ProjectName = p.ProjectName,
+                Jobs = p.ProjectJobs.Select(j => new ProjectJobDto()
+                {
+                    Id = j.Id,
+                    Name = j.Name,
+                    ClassName = j.ClassName,
+                    JobParameters = j.JobParameters,
+                    NextJob = j.NextJob,
+                    Position = j.Position,
+                }).ToList(),
+                Started = p.Started
+            }).ToList();
+        }
+        public static ProjectDto Parse(Project p)
+        {
+            return new ProjectDto()
+            {
+                Id = p.Id,
+                ProjectName = p.ProjectName,
+                Jobs = p.ProjectJobs.Select(j => new ProjectJobDto()
+                {
+                    Id = j.Id,
+                    Name = j.Name,
+                    ClassName = j.ClassName,
+                    JobParameters = j.JobParameters,
+                    NextJob = j.NextJob,
+                    Position = j.Position,
+                }).ToList(),
+                Started = p.Started
+            };
+        }
         public long Id { get; set; }
         public string ProjectName { get; set; }
 

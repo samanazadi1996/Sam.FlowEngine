@@ -12,9 +12,8 @@ public class CreateProjectCommandHandler(IProjectRepository projectRepository, I
 {
     public async Task<BaseResult<long>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
-
-        var data = await projectRepository.GetAllAsync(new Guid(authenticatedUser.UserId), request.ProjectName);
-        if (data.Count > 0)
+        var data = await projectRepository.GetByNameAsync(new Guid(authenticatedUser.UserId), request.ProjectName);
+        if (data is not null)
             return new Error(ErrorCode.DuplicateData);
 
         var project = new Project(request.ProjectName)

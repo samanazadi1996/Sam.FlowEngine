@@ -6,10 +6,10 @@ namespace FlowEngine.Application.Interfaces
 {
     public interface IFlowEngineServices
     {
-        Task Start(string projectName);
-        Task Stop(string projectName);
+        Task Start(long projectId);
+        Task Stop(long projectId);
 
-        Task LoadData(string projectName);
+        Task LoadData(long? projectId);
         Task CteateTemplate(string templateName);
 
 

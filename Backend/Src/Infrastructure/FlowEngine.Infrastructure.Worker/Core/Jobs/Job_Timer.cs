@@ -23,14 +23,14 @@ public sealed class Job_Timer : IJob
         {
             var interval = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.IntervalMs));
 
-            ConsoleLogger.Log($"Run Timer with {interval}");
+            ConsoleLogger.Log($"Run Timer ({this.Name}) with {interval}");
 
             projectModel.Data = [];
             projectModel.Data[FlowEngineConst.EnvironmentVariables] = projectModel.GetValue(JobParameters, FlowEngineConst.EnvironmentVariables);
 
             while (projectModel.Started)
             {
-                ConsoleLogger.Log($"Timer with {interval} Executed");
+                ConsoleLogger.Log($"Timer ({this.Name}) with {interval} Executed");
 
                 await GotoNextJob(projectModel, this.NextJob);
 

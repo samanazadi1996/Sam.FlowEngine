@@ -7,13 +7,15 @@ import { Projects } from './pages/projects/projects';
 import { ProjectDetails } from './pages/projects/project-details/project-details';
 import { CreateProject } from './pages/projects/create-project/create-project';
 import { FormsModule } from '@angular/forms';
+import { UpdateJob } from './pages/projects/project-details/update-job/update-job';
 
 @NgModule({
   declarations: [
     Dashboard,
     Projects,
     ProjectDetails,
-    CreateProject
+    CreateProject,
+    UpdateJob
   ],
   imports: [
     CommonModule,

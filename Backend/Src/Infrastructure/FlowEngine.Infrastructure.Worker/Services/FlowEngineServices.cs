@@ -23,17 +23,18 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
         await projectRepository.AddAsync(project);
     }
 
-    public async Task LoadData(string projectName)
+    public async Task LoadData(long? projectId)
     {
 
         var files = await projectRepository.GetAllAsync(
             string.IsNullOrEmpty(authenticatedUser.UserId) ? null : new Guid(authenticatedUser.UserId),
-            projectName);
+            projectId);
 
         foreach (var data in files)
         {
             var temp = new ProjectModel(data.ProjectName)
             {
+                Id=data.Id,
                 Started = false,
                 Jobs = []
             };
@@ -58,7 +59,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
             if (!flowEngineContext.Projects.TryGetValue(userId, out var _))
                 flowEngineContext.Projects[userId] = [];
 
-            var currentProject = flowEngineContext.Projects[userId].FirstOrDefault(p => p.ProjectName == projectName);
+            var currentProject = flowEngineContext.Projects[userId].FirstOrDefault(p => p.Id == projectId);
 
             if (currentProject is not null)
             {
@@ -73,12 +74,12 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
 
     }
 
-    public async Task Start(string projectName)
+    public async Task Start(long projectId)
     {
         if (!flowEngineContext.Projects.TryGetValue(authenticatedUser.UserId, out var projects))
             return;
 
-        var project = projects.FirstOrDefault(p => p.ProjectName.Equals(projectName));
+        var project = projects.FirstOrDefault(p => p.Id == projectId);
 
         if (project is null)
             return;
@@ -86,12 +87,12 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
         project.Start();
     }
 
-    public async Task Stop(string projectName)
+    public async Task Stop(long projectId)
     {
         if (!flowEngineContext.Projects.TryGetValue(authenticatedUser.UserId, out var projects))
             return;
 
-        var project = projects.FirstOrDefault(p => p.ProjectName.Equals(projectName));
+        var project = projects.FirstOrDefault(p => p.Id == projectId);
 
         if (project is null)
             return;
@@ -165,7 +166,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
 
             await unitOfWork.SaveChangesAsync();
 
-            await LoadData(project.ProjectName);
+            await LoadData(project.Id);
         }
     }
 

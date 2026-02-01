@@ -11,16 +11,15 @@ public class StopProjectCommandHandler(IFlowEngineServices flowEngine, IAuthenti
 {
     public async Task<BaseResult> Handle(StopProjectCommand request, CancellationToken cancellationToken)
     {
-        var data = await projectRepository.GetAllAsync(new Guid(authenticatedUser.UserId), request.ProjectName);
-        if (data.Count == 0)
+        var data = await projectRepository.GetByNameAsync(new Guid(authenticatedUser.UserId), request.ProjectName);
+        if (data is null)
             return new Error(ErrorCode.NotFound);
 
-        foreach (var item in data)
-            item.Started = false;
+        data.Started = false;
 
         await unitOfWork.SaveChangesAsync();
 
-        await flowEngine.Stop(request.ProjectName);
+        await flowEngine.Stop(data.Id);
 
         return BaseResult.Ok();
     }

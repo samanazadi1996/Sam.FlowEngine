@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as joint from 'jointjs';
 import { ProjectDtoInterface } from '../../../../../core/services/interfaces/project-dto-interface';
 import { JobService } from '../../../../../core/services/job.service';
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateJob } from './update-job/update-job';
 
 @Component({
   selector: 'app-project-details',
@@ -24,6 +26,7 @@ export class ProjectDetails implements OnInit {
   constructor(private generalService: GeneralService,
     private projectService: ProjectService,
     private jobService: JobService,
+    private dialog: MatDialog,
     private route: ActivatedRoute) {
   }
 
@@ -155,7 +158,19 @@ export class ProjectDetails implements OnInit {
     const job = element.prop('data');
     console.log(job);
 
+
+    const dialogRef = this.dialog.open(UpdateJob, {
+      width: '400px',
+      panelClass: 'no-dialog-surface',
+      data: { ...job },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadData()
+    });
   }
+
   onNodeDrop(element: any) {
     const job = element.prop('data');
 

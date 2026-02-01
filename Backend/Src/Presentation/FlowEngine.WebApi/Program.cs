@@ -58,7 +58,7 @@ using (var scope = app.Services.CreateScope())
     await DefaultBasicUser.SeedAsync(services.GetRequiredService<UserManager<ApplicationUser>>());
     await DefaultData.SeedAsync(services.GetRequiredService<ApplicationDbContext>());
 
-    await services.GetRequiredService<IFlowEngineServices>().LoadData("*");
+    await services.GetRequiredService<IFlowEngineServices>().LoadData(0);
 }
 
 app.UseCustomLocalization();

@@ -25,7 +25,7 @@ public class ProjectRepository(ApplicationDbContext dbContext) : GenericReposito
     //        pageSize);
 
     //}
-    public async Task<List<Project>> GetAllAsync(Guid? userId, string projectName)
+    public async Task<List<Project>> GetAllAsync(Guid? userId, long? projectId)
     {
         var query = dbContext.Projects
             .Include(p => p.ProjectJobs)
@@ -35,35 +35,19 @@ public class ProjectRepository(ApplicationDbContext dbContext) : GenericReposito
             query = query.Where(p => p.CreatedBy == userId);
 
 
-        if (projectName != "*" && !string.IsNullOrEmpty(projectName))
-            query = query.Where(p => p.ProjectName == projectName);
+        if (projectId.HasValue && projectId != 0)
+            query = query.Where(p => p.Id == projectId);
 
         return await query.ToListAsync();
 
     }
 
-    public async Task<ProjectDto> GetByNameAsync(Guid userId, string projectName)
+    public async Task<Project> GetByNameAsync(Guid userId, string projectName)
     {
         return await dbContext.Projects
             .Where(p => p.ProjectName == projectName)
             .Where(p => p.CreatedBy == userId)
             .Include(p => p.ProjectJobs)
-            .Select(p => new ProjectDto()
-            {
-                Id = p.Id,
-                ProjectName = p.ProjectName,
-                Jobs = p.ProjectJobs.Select(j => new ProjectJobDto()
-                {
-                    Id = j.Id,
-                    Name = j.Name,
-                    ClassName = j.ClassName,
-                    JobParameters = j.JobParameters,
-                    NextJob = j.NextJob,
-                    Position = j.Position,
-                }).ToList(),
-                Started = p.Started
-
-            })
             .FirstOrDefaultAsync();
 
     }

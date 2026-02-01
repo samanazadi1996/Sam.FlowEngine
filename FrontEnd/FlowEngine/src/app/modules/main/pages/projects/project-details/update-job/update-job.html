@@ -1,0 +1,45 @@
+@if(model){
+<div class="card stretch stretch-full">
+    <div class="card-header">
+        <h5 class="card-title">Update Job</h5>
+
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label">Job Name</label>
+            <input type="text" class="form-control" placeholder="Job Name" [(ngModel)]="model.name">
+        </div>
+        @if(hasParameter("IntervalMs")){
+
+        <div class="mb-3">
+            <label class="form-label">Interval (Ms)</label>
+            <input type="number" class="form-control" placeholder="Job Name"
+                [(ngModel)]="model.jobParameters['IntervalMs']">
+        </div>
+        }
+        @if(hasParameter("EnvironmentVariables")){
+
+        <div class="mb-3">
+            <label class="form-label">Environment Variables</label>
+            <textarea type="text" class="form-control" placeholder="Job Name" rows="10"
+                [(ngModel)]="model.jobParameters['EnvironmentVariables']"></textarea>
+        </div>
+        }
+
+    </div>
+    <div class="card-footer">
+        <div class="d-flex gap-2 text-center pt-4">
+            <button (click)="close()" class="w-50 btn btn-light-brand">
+
+                <i class="feather-trash-2 me-2"></i>
+                <span>Close</span>
+            </button>
+            <button (click)="save()" class="w-50 btn btn-primary">
+                <i class="feather-edit me-2"></i>
+                <span>Save</span>
+            </button>
+        </div>
+
+    </div>
+</div>
+}
