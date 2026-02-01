@@ -7,7 +7,9 @@ using System.Reflection;
 
 namespace FlowEngine.Infrastructure.Worker.Services;
 
-public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEngineContext, IProjectRepository projectRepository, IAuthenticatedUserService authenticatedUser) : IFlowEngineServices
+public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEngineContext, IProjectRepository projectRepository,
+    IJobRepository jobRepository,
+    IAuthenticatedUserService authenticatedUser) : IFlowEngineServices
 {
     public async Task Save(string projectName)
     {
@@ -39,7 +41,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
             {
                 var type = Type.GetType(j.ClassName);
                 var job = (Activator.CreateInstance(type!) as IJob)!;
-                job.Id= j.Id;
+                job.Id = j.Id;
                 job.ClassName = j.ClassName;
                 job.Name = j.Name;
                 job.NextJob = j.NextJob;
@@ -101,7 +103,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
     {
         Project? project = null;
         Dictionary<string, string>? NextJobs = null;
-
+        List<Tuple<string, string, string>>? ParamsNextJobs = null;
         if (templateName == "Test")
         {
             var data = DefaultData.GetTestTemplate();
@@ -116,8 +118,13 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
             NextJobs = data.NextJobs;
         }
 
-        //if (templateName == "Test3")
-        //    project = DefaultData.GetTestTemplate3();
+        if (templateName == "Test3")
+        {
+            var data = DefaultData.GetTestTemplate3();
+            project = data.Project;
+            NextJobs = data.NextJobs;
+            ParamsNextJobs = data.paramsNextJobs;
+        }
 
         if (templateName == "Test4")
         {
@@ -133,12 +140,27 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
             await unitOfWork.SaveChangesAsync();
 
             if (NextJobs is not null)
-
                 foreach (var item in NextJobs)
                 {
-                    var job= project.ProjectJobs!.FirstOrDefault(p => p.Name == item.Key);
+                    var job = project.ProjectJobs!.FirstOrDefault(p => p.Name == item.Key);
                     if (job is not null)
-                        job.NextJob =[ project.ProjectJobs!.First(p => p.Name == item.Value).Id];
+                        job.NextJob = [project.ProjectJobs!.First(p => p.Name == item.Value).Id];
+                }
+
+            if (ParamsNextJobs is not null)
+                foreach (var item in ParamsNextJobs)
+                {
+                    var job = project.ProjectJobs!.FirstOrDefault(p => p.Name == item.Item1);
+                    if (job is not null)
+                    {
+                        var nJob = project.ProjectJobs!.FirstOrDefault(p => p.Name == item.Item3);
+                        if (nJob is not null)
+                        {
+                            job.JobParameters ??= [];
+                            job.JobParameters[item.Item2] = nJob.Id + "";
+                        }
+                        jobRepository.Update(job);
+                    }
                 }
 
             await unitOfWork.SaveChangesAsync();

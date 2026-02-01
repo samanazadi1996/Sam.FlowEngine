@@ -23,12 +23,12 @@ public abstract class IJob : ProjectJob
 
         foreach (var item in nextJobs)
         {
-            var jobs = projectModel.Jobs.FirstOrDefault(p => p.Id == item);
+            var job = projectModel.Jobs.FirstOrDefault(p => p.Id == item);
 
-            if (jobs != null)
+            if (job != null)
             {
-                ConsoleLogger.Log($"Run Job {item}");
-                Task.Run(async () => await jobs.Execute(projectModel));
+                ConsoleLogger.Log($"Run Job {job.Name}");
+                Task.Run(async () => await job.Execute(projectModel));
             }
 
         }

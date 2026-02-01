@@ -120,9 +120,9 @@ export class ProjectDetails implements OnInit {
       if (!fromNode) continue;
       var listnextJobj = job.nextJob ?? [];
 
-      // if (job.jobParameters["True"]) listnextJobj.push(job.jobParameters["True"]);
+      if (job.jobParameters["True"]) listnextJobj.push(job.jobParameters["True"]);
 
-      // if (job.jobParameters["False"]) listnextJobj?.push(job.jobParameters["False"]);
+      if (job.jobParameters["False"]) listnextJobj?.push(job.jobParameters["False"]);
 
 
       listnextJobj?.forEach(next => {
