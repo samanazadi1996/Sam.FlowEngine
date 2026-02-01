@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MainRoutingModule } from './main-routing-module';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Projects } from './pages/projects/projects';
-import { ProjectDetail } from './pages/projects/project-detail/project-detail';
+import { ProjectDetails } from './pages/projects/project-details/project-details';
 import { CreateProject } from './pages/projects/create-project/create-project';
 import { FormsModule } from '@angular/forms';
 
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   declarations: [
     Dashboard,
     Projects,
-    ProjectDetail,
+    ProjectDetails,
     CreateProject
   ],
   imports: [
