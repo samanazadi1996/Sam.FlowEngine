@@ -1,5 +1,4 @@
 using FlowEngine.Domain.Projects.Entities;
-using FlowEngine.Domain.Projects.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
@@ -14,16 +13,29 @@ namespace FlowEngine.Infrastructure.Persistence.Contexts.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            //builder.Property(p => p.Data)
-            //    .HasConversion(
-            //    v => JsonSerializer.Serialize(v),
-            //    v => JsonSerializer.Deserialize<Dictionary<string, string>>(v) ?? new Dictionary<string, string>()
-            //    );
+            builder.HasMany(x => x.ProjectJobs)
+                   .WithOne(x => x.Project)
+                   .HasForeignKey(x => x.ProjectId)
+                   .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
+    public class ProjectJobConfiguration : IEntityTypeConfiguration<ProjectJob>
+    {
 
-            builder.Property(p => p.Jobs)
+        public void Configure(EntityTypeBuilder<ProjectJob> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.Property(p => p.NextJob)
                 .HasConversion(
                 v => JsonSerializer.Serialize(v),
-                v => JsonSerializer.Deserialize<List<ProjectJob>>(v) ?? new List<ProjectJob>()
+                v => JsonSerializer.Deserialize<List<string>>(v) ?? new List<string>()
+                );
+
+            builder.Property(p => p.JobParameters)
+                .HasConversion(
+                v => JsonSerializer.Serialize(v),
+                v => JsonSerializer.Deserialize<Dictionary<string, string>>(v) ?? new Dictionary<string, string>()
                 );
 
         }

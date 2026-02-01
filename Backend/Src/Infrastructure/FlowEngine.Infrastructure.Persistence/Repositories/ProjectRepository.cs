@@ -1,4 +1,5 @@
 using FlowEngine.Application.Interfaces.Repositories;
+using FlowEngine.Domain.Projects.DTOs;
 using FlowEngine.Domain.Projects.Entities;
 using FlowEngine.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,9 @@ namespace FlowEngine.Infrastructure.Persistence.Repositories
         //}
         public async Task<List<Project>> GetAllAsync(Guid? userId, string projectName)
         {
-            var query = dbContext.Projects.AsQueryable();
+            var query = dbContext.Projects
+                .Include(p => p.ProjectJobs)
+                .AsQueryable();
 
             if (userId is not null)
                 query = query.Where(p => p.CreatedBy == userId);
@@ -37,6 +40,31 @@ namespace FlowEngine.Infrastructure.Persistence.Repositories
                 query = query.Where(p => p.ProjectName == projectName);
 
             return await query.ToListAsync();
+
+        }
+
+        public async Task<ProjectDto> GetByNameAsync(Guid userId, string projectName)
+        {
+            return await dbContext.Projects
+                .Where(p => p.ProjectName == projectName)
+                .Where(p => p.CreatedBy == userId)
+                .Include(p => p.ProjectJobs)
+                .Select(p => new ProjectDto()
+                {
+                    Id = p.Id,
+                    ProjectName = p.ProjectName,
+                    Jobs = p.ProjectJobs.Select(j => new ProjectJobDto()
+                    {
+                        Id = j.Id,
+                        Name = j.Name,
+                        ClassName = j.ClassName,
+                        JobParameters = j.JobParameters,
+                        NextJob = j.NextJob
+                    }).ToList(),
+                    Started = p.Started
+
+                })
+                .FirstOrDefaultAsync();
 
         }
     }

@@ -10,6 +10,7 @@ namespace FlowEngine.Infrastructure.Persistence.Contexts
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IAuthenticatedUserService authenticatedUser) : DbContext(options)
     {
         public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectJob> ProjectJobs { get; set; }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
         {
             ChangeTracker.ApplyAuditing(authenticatedUser);

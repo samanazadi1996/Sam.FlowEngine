@@ -1,5 +1,4 @@
-﻿using FlowEngine.Domain.Projects.ValueObjects;
-using FlowEngine.Infrastructure.Worker.Core;
+﻿using FlowEngine.Infrastructure.Worker.Core;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;

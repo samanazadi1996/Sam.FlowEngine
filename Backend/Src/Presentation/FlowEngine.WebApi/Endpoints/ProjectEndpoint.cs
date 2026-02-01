@@ -4,6 +4,7 @@ using FlowEngine.Application.Features.Projects.Commands.StopProject;
 using FlowEngine.Application.Features.Projects.Queries.GetUserProjects;
 using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Wrappers;
+using FlowEngine.Domain.Projects.DTOs;
 using FlowEngine.Domain.Projects.Entities;
 using FlowEngine.WebApi.Infrastructure.Extensions;
 using FlowEnginex.Application.Features.Projects.Queries.GetUserProjectByName;
@@ -33,8 +34,8 @@ public class ProjectEndpoint : EndpointGroupBase
 
     async Task<BaseResult<List<GetUserProjectsResponse>>> GetUserProjects(IMediator mediator, [AsParameters] GetUserProjectsQuery model)
         => await mediator.Send<GetUserProjectsQuery, BaseResult<List<GetUserProjectsResponse>>>(model);
-    async Task<BaseResult<Project>> GetUserProjectByName(IMediator mediator, [AsParameters] GetUserProjectByNameQuery model)
-        => await mediator.Send<GetUserProjectByNameQuery, BaseResult<Project>>(model);
+    async Task<BaseResult<ProjectDto>> GetUserProjectByName(IMediator mediator, [AsParameters] GetUserProjectByNameQuery model)
+        => await mediator.Send<GetUserProjectByNameQuery, BaseResult<ProjectDto>>(model);
 
     async Task<BaseResult> CreateProject(IMediator mediator, CreateProjectCommand model)
         => await mediator.Send<CreateProjectCommand, BaseResult<long>>(model);

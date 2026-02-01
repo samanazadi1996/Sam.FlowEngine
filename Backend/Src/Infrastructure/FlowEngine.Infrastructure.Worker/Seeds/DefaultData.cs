@@ -10,7 +10,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
         {
             return new Project("Test")
             {
-                Jobs = [
+                ProjectJobs = [
                     new Job_Start()
                     {
                         Name="Start",
@@ -49,7 +49,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
         {
             return new Project("Test2")
             {
-                Jobs = [
+                ProjectJobs = [
                     new Job_Timer()
                     {
                         Name="Start",
@@ -65,7 +65,6 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
                     new Job_HttpRequest()
                     {
                         Name="HttpRequest2",
-
                     }
                     .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/PostJson")
                     .UpdateJobParameter(FlowEngineConst.Method,"Post")
@@ -77,7 +76,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
         {
             return new Project("Test3")
             {
-                Jobs = [
+                ProjectJobs = [
                     new Job_Timer()
                     {
                         Name="Start",
@@ -119,7 +118,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
         {
             return new Project("Test4")
             {
-                Jobs = [
+                ProjectJobs = [
                     new Job_Timer()
                     {
                         Name="Start",

@@ -1,5 +1,4 @@
 ﻿using FlowEngine.Domain.Common;
-using FlowEngine.Domain.Projects.ValueObjects;
 using System.Collections.Generic;
 
 namespace FlowEngine.Domain.Projects.Entities
@@ -16,7 +15,19 @@ namespace FlowEngine.Domain.Projects.Entities
             //BarCode = barCode;
         }
         public string ProjectName { get; set; }
-        public List<ProjectJob>? Jobs { get; set; }
+        public List<ProjectJob>? ProjectJobs { get; set; }
         public bool Started { get; set; }
     }
+
+    public class ProjectJob: BaseEntity
+    {
+        public string ClassName { get; set; }
+        public string Name { get; set; }
+        public Dictionary<string, string?>? JobParameters { get; set; }
+        public List<string>? NextJob { get; set; }
+
+        public long ProjectId { get; set; }
+        public Project Project { get; set; }
+    }
+
 }

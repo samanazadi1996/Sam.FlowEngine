@@ -1,4 +1,4 @@
-﻿using FlowEngine.Domain.Projects.ValueObjects;
+﻿using FlowEngine.Domain.Projects.Entities;
 using FlowEngine.Infrastructure.Worker.Helpers;
 
 namespace FlowEngine.Infrastructure.Worker.Core;

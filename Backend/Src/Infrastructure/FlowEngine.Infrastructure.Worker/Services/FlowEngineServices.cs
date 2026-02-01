@@ -1,7 +1,6 @@
 ﻿using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Interfaces.Repositories;
 using FlowEngine.Domain.Projects.Entities;
-using FlowEngine.Domain.Projects.ValueObjects;
 using FlowEngine.Infrastructure.Worker.Core;
 using FlowEngine.Infrastructure.Worker.Seeds;
 using System.Reflection;
@@ -36,7 +35,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
                 Started = false,
                 Jobs = []
             };
-            foreach (var j in data.Jobs ?? [])
+            foreach (var j in data.ProjectJobs ?? [])
             {
                 var type = Type.GetType(j.ClassName);
                 var job = (Activator.CreateInstance(type!) as IJob)!;
