@@ -39,6 +39,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
             {
                 var type = Type.GetType(j.ClassName);
                 var job = (Activator.CreateInstance(type!) as IJob)!;
+                job.Id= j.Id;
                 job.ClassName = j.ClassName;
                 job.Name = j.Name;
                 job.NextJob = j.NextJob;
@@ -99,22 +100,46 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
     public async Task CteateTemplate(string templateName)
     {
         Project? project = null;
+        Dictionary<string, string>? NextJobs = null;
 
         if (templateName == "Test")
-            project = DefaultData.GetTestTemplate();
+        {
+            var data = DefaultData.GetTestTemplate();
+            project = data.Project;
+            NextJobs = data.NextJobs;
+        }
 
         if (templateName == "Test2")
-            project = DefaultData.GetTestTemplate2();
+        {
+            var data = DefaultData.GetTestTemplate2();
+            project = data.Project;
+            NextJobs = data.NextJobs;
+        }
 
-        if (templateName == "Test3")
-            project = DefaultData.GetTestTemplate3();
+        //if (templateName == "Test3")
+        //    project = DefaultData.GetTestTemplate3();
 
         if (templateName == "Test4")
-            project = DefaultData.GetTestTemplate4();
+        {
+            var data = DefaultData.GetTestTemplate4();
+            project = data.Project;
+            NextJobs = data.NextJobs;
+        }
 
         if (project is not null)
         {
             await projectRepository.AddAsync(project);
+
+            await unitOfWork.SaveChangesAsync();
+
+            if (NextJobs is not null)
+
+                foreach (var item in NextJobs)
+                {
+                    var job= project.ProjectJobs!.FirstOrDefault(p => p.Name == item.Key);
+                    if (job is not null)
+                        job.NextJob =[ project.ProjectJobs!.First(p => p.Name == item.Value).Id];
+                }
 
             await unitOfWork.SaveChangesAsync();
 

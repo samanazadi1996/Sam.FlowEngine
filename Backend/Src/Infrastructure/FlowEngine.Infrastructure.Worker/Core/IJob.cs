@@ -15,7 +15,7 @@ public abstract class IJob : ProjectJob
             }
         return this;
     }
-    public async Task GotoNextJob(ProjectModel projectModel, List<string> nextJobs)
+    public async Task GotoNextJob(ProjectModel projectModel, List<long>? nextJobs)
     {
         if (!projectModel.Started) return;
 
@@ -23,7 +23,7 @@ public abstract class IJob : ProjectJob
 
         foreach (var item in nextJobs)
         {
-            var jobs = projectModel.Jobs.FirstOrDefault(p => p.Name == item);
+            var jobs = projectModel.Jobs.FirstOrDefault(p => p.Id == item);
 
             if (jobs != null)
             {

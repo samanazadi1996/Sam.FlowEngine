@@ -2,6 +2,7 @@ using FlowEngine.Domain.Projects.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text.Json;
 
 namespace FlowEngine.Infrastructure.Persistence.Contexts.Configurations
@@ -29,7 +30,13 @@ namespace FlowEngine.Infrastructure.Persistence.Contexts.Configurations
             builder.Property(p => p.NextJob)
                 .HasConversion(
                 v => JsonSerializer.Serialize(v),
-                v => JsonSerializer.Deserialize<List<string>>(v) ?? new List<string>()
+                v => JsonSerializer.Deserialize<List<long>>(v) ?? new List<long>()
+                );
+
+            builder.Property(p => p.Position)
+                .HasConversion(
+                v => JsonSerializer.Serialize(v),
+                v => JsonSerializer.Deserialize<Point>(v)
                 );
 
             builder.Property(p => p.JobParameters)

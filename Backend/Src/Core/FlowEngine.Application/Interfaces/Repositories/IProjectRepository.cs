@@ -5,12 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FlowEngine.Application.Interfaces.Repositories
+namespace FlowEngine.Application.Interfaces.Repositories;
+
+public interface IProjectRepository : IGenericRepository<Project>
 {
-    public interface IProjectRepository : IGenericRepository<Project>
-    {
-        //Task<PaginationResponseDto<ProjectDto>> GetPagedListAsync(int pageNumber, int pageSize, string name);
-        Task<List<Project>> GetAllAsync(Guid? userId, string projectName);
-        Task<ProjectDto> GetByNameAsync(Guid guid, string projectName);
-    }
+    //Task<PaginationResponseDto<ProjectDto>> GetPagedListAsync(int pageNumber, int pageSize, string name);
+    Task<List<Project>> GetAllAsync(Guid? userId, string projectName);
+    Task<ProjectDto> GetByNameAsync(Guid guid, string projectName);
 }

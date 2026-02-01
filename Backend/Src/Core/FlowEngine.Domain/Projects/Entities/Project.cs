@@ -1,5 +1,6 @@
 ﻿using FlowEngine.Domain.Common;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace FlowEngine.Domain.Projects.Entities
 {
@@ -24,9 +25,10 @@ namespace FlowEngine.Domain.Projects.Entities
         public string ClassName { get; set; }
         public string Name { get; set; }
         public Dictionary<string, string?>? JobParameters { get; set; }
-        public List<string>? NextJob { get; set; }
+        public List<long>? NextJob { get; set; }
 
         public long ProjectId { get; set; }
+        public Point? Position { get; set; }
         public Project Project { get; set; }
     }
 

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 import { GetUserProjectsResponseListBaseResultInterface } from './interfaces/get-user-projects-response-list-base-result-interface';
-import { ProjectBaseResultInterface } from './interfaces/project-base-result-interface';
+import { ProjectDtoBaseResultInterface } from './interfaces/project-dto-base-result-interface';
 import { StartProjectCommandInterface } from './interfaces/start-project-command-interface';
 import { BaseResultInterface } from './interfaces/base-result-interface';
 import { StopProjectCommandInterface } from './interfaces/stop-project-command-interface';
@@ -28,7 +28,7 @@ export class ProjectService {
         if (projectName !== null && projectName !== undefined)
             params = params.set('ProjectName', projectName);
 
-        return this.http.get<ProjectBaseResultInterface>(`${environment.serverUrl}/api/Project/GetUserProjectByName`, { params });
+        return this.http.get<ProjectDtoBaseResultInterface>(`${environment.serverUrl}/api/Project/GetUserProjectByName`, { params });
     }
 
     postApiProjectStartProject(body : StartProjectCommandInterface) {

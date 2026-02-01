@@ -1,9 +1,10 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { GeneralService } from '../../../../../core/services/general.service';
 import { ProjectService } from '../../../../../core/services/project.service';
-import { ProjectInterface } from '../../../../../core/services/interfaces/project-interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as joint from 'jointjs';
+import { ProjectDtoInterface } from '../../../../../core/services/interfaces/project-dto-interface';
+import { JobService } from '../../../../../core/services/job.service';
 
 @Component({
   selector: 'app-project-details',
@@ -12,7 +13,7 @@ import * as joint from 'jointjs';
   styleUrl: './project-details.scss',
 })
 export class ProjectDetails implements OnInit {
-  data?: ProjectInterface;
+  data?: ProjectDtoInterface;
   projectName?: string;
   @ViewChild('paperContainer', { static: true })
   paperContainer!: ElementRef;
@@ -20,7 +21,10 @@ export class ProjectDetails implements OnInit {
   graph!: joint.dia.Graph;
   paper!: joint.dia.Paper;
 
-  constructor(private generalService: GeneralService, private projectService: ProjectService, private route: ActivatedRoute) {
+  constructor(private generalService: GeneralService,
+    private projectService: ProjectService,
+    private jobService: JobService,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -50,7 +54,7 @@ export class ProjectDetails implements OnInit {
       drawGrid: true,
       interactive: true
     });
-  this.registerEvents();
+    this.registerEvents();
 
   }
   renderFromData() {
@@ -61,73 +65,68 @@ export class ProjectDetails implements OnInit {
 
     const nodeMap = new Map<string, joint.dia.Element>();
 
-    let x = 50;
-    let y = 50;
-
-    // 🔷 Nodes
     for (const job of this.data.jobs) {
       const rect = new joint.shapes.standard.Rectangle();
 
-    rect.position(x, y);
-    rect.resize(200, 70);
+      rect.position(job.position.x, job.position.y);
+      rect.resize(200, 70);
 
-    rect.markup = [
-      { tagName: 'rect', selector: 'body' },
-      { tagName: 'text', selector: 'label' },
-      { tagName: 'image', selector: 'icon' }   // 👈 image
-    ];
+      rect.markup = [
+        { tagName: 'rect', selector: 'body' },
+        { tagName: 'text', selector: 'label' },
+        { tagName: 'image', selector: 'icon' }   // 👈 image
+      ];
 
-    rect.attr({
-      body: {
-        fill: '#E3F2FD',
-        stroke: '#1E88E5',
-        rx: 8,
-        ry: 8,
-        cursor: 'pointer'        
-      },
-      label: {
-        text: job.name,
-        fill: '#000',
-        fontSize: 13,
-        fontWeight: 'bold',
-        refX: 10,
-        refY: '50%',
-        textAnchor: 'start',
-        textVerticalAnchor: 'middle',
-        cursor: 'pointer'
-      },
-      icon: {
-        'xlink:href': `/icon/jobs/${job.className}.svg`,
-        width: 32,
-        height: 32,
-        refX: '100%',
-        refX2: -40,
-        refY: '50%',
-        refY2: -16,
-        cursor: 'pointer'
-      }
-    });
+      rect.attr({
+        body: {
+          fill: '#E3F2FD',
+          stroke: '#1E88E5',
+          rx: 8,
+          ry: 8,
+          cursor: 'pointer'
+        },
+        label: {
+          text: job.name,
+          fill: '#000',
+          fontSize: 13,
+          fontWeight: 'bold',
+          refX: 10,
+          refY: '50%',
+          textAnchor: 'start',
+          textVerticalAnchor: 'middle',
+          cursor: 'pointer'
+        },
+        icon: {
+          'xlink:href': `/icon/jobs/${job.className}.svg`,
+          width: 32,
+          height: 32,
+          refX: '100%',
+          refX2: -40,
+          refY: '50%',
+          refY2: -16,
+          cursor: 'pointer'
+        }
+      });
 
-    rect.prop('jobName', job.name);
-    rect.addTo(this.graph);
-    nodeMap.set(job.name!, rect);
+      rect.prop('data', job);
+      rect.addTo(this.graph);
+      nodeMap.set(job.id + '', rect);
 
-    y += 100;
     }
 
     // 🔗 Links
     for (const job of this.data.jobs) {
-      const fromNode = nodeMap.get(job.name!);
+      const fromNode = nodeMap.get(job.id + '');
       if (!fromNode) continue;
       var listnextJobj = job.nextJob ?? [];
 
-      if (job.jobParameters["True"]) listnextJobj.push(job.jobParameters["True"]);
+      // if (job.jobParameters["True"]) listnextJobj.push(job.jobParameters["True"]);
 
-      if (job.jobParameters["False"]) listnextJobj?.push(job.jobParameters["False"]);
+      // if (job.jobParameters["False"]) listnextJobj?.push(job.jobParameters["False"]);
 
 
       listnextJobj?.forEach(next => {
-        const toNode = nodeMap.get(next);
+        const toNode = nodeMap.get(next + '');
         if (!toNode) return;
 
         const link = new joint.shapes.standard.Link();
@@ -139,18 +138,41 @@ export class ProjectDetails implements OnInit {
       });
     }
   }
-registerEvents() {
-  this.paper.on('element:pointerclick', (elementView) => {
-    const element = elementView as any;
-    this.onNodeClick(element.model);
-  });
-}
-onNodeClick(element: any) {
-  console.log('Clicked element:', element);
+  registerEvents() {
+    this.paper.on('element:pointerclick', (elementView) => {
+      const element = elementView as any;
+      this.onNodeClick(element.model);
+    });
+    this.paper.on('element:pointerup', (elementView) => {
+      const element = elementView as any;
+      this.onNodeDrop(element.model);
+    });
 
-  const job = element.prop('data');
-  console.log(job);
+  }
+  onNodeClick(element: any) {
+    console.log('Clicked element:', element);
 
-}
+    const job = element.prop('data');
+    console.log(job);
+
+  }
+  onNodeDrop(element: any) {
+    const job = element.prop('data');
+
+    const position = element.position();
+
+    var hasChange = job.position.x != position.x && job.position.y != position.y;
+    if (hasChange) {
+      const jobId = element.prop('data').id;
+      this.jobService.putApiJobUpdatePositionJob({ jobId: jobId, x: position.x, y: position.y })
+        .subscribe(response => {
+          if (this.generalService.isSuccess(response))
+            element.prop('data').position = {
+              x: position.x,
+              y: position.y
+            }
+        })
+    }
+  }
 
 }

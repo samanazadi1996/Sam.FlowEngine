@@ -22,7 +22,7 @@ public sealed class Job_If : IJob
         try
         {
 
-            string nextJob = "";
+            long? nextJob = null;
 
             var expression = projectModel.GetValue(JobParameters, FlowEngineConst.Expression);
 
@@ -30,17 +30,17 @@ public sealed class Job_If : IJob
             {
                 var t = projectModel.GetValue(JobParameters, FlowEngineConst.True);
                 if (!string.IsNullOrEmpty(t))
-                    nextJob = t;
+                    nextJob = Convert.ToInt64(t);
 
             }
             else
             {
                 var f = projectModel.GetValue(JobParameters, FlowEngineConst.False);
                 if (!string.IsNullOrEmpty(f))
-                    nextJob = f;
+                    nextJob = Convert.ToInt64(f);
             }
 
-            await GotoNextJob(projectModel, [.. (this.NextJob ?? []).Union([nextJob])]);
+            await GotoNextJob(projectModel, [.. (this.NextJob ?? []).Union([nextJob!.Value])]);
         }
         catch (Exception ex)
         {

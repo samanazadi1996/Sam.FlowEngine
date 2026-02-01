@@ -8,7 +8,7 @@ export interface ProjectInterface {
   lastModifiedBy?: string;
   lastModified?: string;
   projectName?: string;
-  jobs?: ProjectJobInterface[];
+  projectJobs?: ProjectJobInterface[];
   started: boolean;
 
 }
