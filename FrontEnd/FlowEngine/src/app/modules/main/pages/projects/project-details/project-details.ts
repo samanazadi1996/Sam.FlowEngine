@@ -44,8 +44,11 @@ export class ProjectDetails implements OnInit {
     })
   }
 
-
   ngAfterViewInit(): void {
+    this.configureGraph()
+  }
+
+  configureGraph() {
     this.graph = new joint.dia.Graph();
 
     this.paper = new joint.dia.Paper({
@@ -60,6 +63,7 @@ export class ProjectDetails implements OnInit {
     this.registerEvents();
 
   }
+
   renderFromData() {
     if (!this.data?.jobs) return;
 
@@ -141,6 +145,7 @@ export class ProjectDetails implements OnInit {
       });
     }
   }
+
   registerEvents() {
     this.paper.on('element:pointerclick', (elementView) => {
       const element = elementView as any;
@@ -152,12 +157,9 @@ export class ProjectDetails implements OnInit {
     });
 
   }
+
   onNodeClick(element: any) {
-    console.log('Clicked element:', element);
-
     const job = element.prop('data');
-    console.log(job);
-
 
     const dialogRef = this.dialog.open(UpdateJob, {
       width: '400px',
@@ -167,6 +169,7 @@ export class ProjectDetails implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.configureGraph()
       this.loadData()
     });
   }
@@ -176,7 +179,7 @@ export class ProjectDetails implements OnInit {
 
     const position = element.position();
 
-    var hasChange = job.position.x != position.x && job.position.y != position.y;
+    var hasChange = job.position.x != position.x || job.position.y != position.y;
     if (hasChange) {
       const jobId = element.prop('data').id;
       this.jobService.putApiJobUpdatePositionJob({ jobId: jobId, x: position.x, y: position.y })
