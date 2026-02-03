@@ -6,7 +6,9 @@ using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Wrappers;
 using FlowEngine.Domain.Projects.DTOs;
 using FlowEngine.Domain.Projects.Entities;
+using FlowEngine.Infrastructure.Worker.Helpers;
 using FlowEngine.WebApi.Infrastructure.Extensions;
+using FlowEnginex.Application.Features.Projects.Queries.GetProjectDataTemplate;
 using FlowEnginex.Application.Features.Projects.Queries.GetUserProjectByName;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +31,8 @@ public class ProjectEndpoint : EndpointGroupBase
         builder.MapPost(CreateProject).RequireAuthorization();
 
         builder.MapPost(CteateTemplate).RequireAuthorization();
+
+        builder.MapGet(GetProjectDataTemplate).RequireAuthorization();
     }
 
 
@@ -45,6 +49,8 @@ public class ProjectEndpoint : EndpointGroupBase
 
     async Task<BaseResult> StopProject(IMediator mediator, StopProjectCommand model)
         => await mediator.Send<StopProjectCommand, BaseResult>(model);
+    async Task<BaseResult<Dictionary<string, string>>> GetProjectDataTemplate(IMediator mediator, [AsParameters] GetProjectDataTemplateQuery model)
+        => await mediator.Send<GetProjectDataTemplateQuery, BaseResult<Dictionary<string, string>>>(model);
 
     async Task<BaseResult> CteateTemplate(IFlowEngineServices flowEngine, string templateName)
     {

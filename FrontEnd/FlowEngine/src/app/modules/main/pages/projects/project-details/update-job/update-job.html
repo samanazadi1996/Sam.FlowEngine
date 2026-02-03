@@ -4,63 +4,107 @@
         <h5 class="card-title">Update Job</h5>
 
     </div>
-    <div class="card-body">
-        <div class="mb-3">
-            <label class="form-label">Job Name</label>
-            <input type="text" class="form-control" [(ngModel)]="model.name">
+    <div class="d-flex" style="    max-height: 70vh;height: 70vh;">
+        <div class="col-5 overflow-scroll" >
+            @if (dataTemplate) {
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                    <li class="mat-tree-node">
+                        <button mat-icon-button disabled></button>
+                        {{node.name}}
+                    </li>
+                </mat-tree-node>
+
+                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                    <li>
+                        <div class="mat-tree-node">
+                            <button mat-icon-button matTreeNodeToggle>
+                                <mat-icon>
+                                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                </mat-icon>
+                            </button>
+                            {{node.name}}
+                        </div>
+                        <ul [class.invisible]="!treeControl.isExpanded(node)">
+                            <ng-container matTreeNodeOutlet></ng-container>
+                        </ul>
+                    </li>
+                </mat-nested-tree-node>
+            </mat-tree>
+            }
         </div>
-        @if(hasParameter("IntervalMs")){
 
-        <div class="mb-3">
-            <label class="form-label">Interval (Ms)</label>
-            <input type="text" class="form-control" [(ngModel)]="model.jobParameters['IntervalMs']">
-        </div>
-        }
+        <div class="col-7 overflow-scroll position-relative" >
+            <div class="card-body">
 
-        @if(hasParameter("SleepTimeMs")){
-        <div class="mb-3">
-            <label class="form-label">SleepTime (Ms)</label>
-            <input type="text" class="form-control" [(ngModel)]="model.jobParameters['SleepTimeMs']">
-        </div>
-        }
+                <div class="mb-3">
+                    <label class="form-label">Job Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="model.name">
+                </div>
+                @if(hasParameter("IntervalMs")){
 
+                <div class="mb-3">
+                    <label class="form-label">Interval (Ms)</label>
+                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['IntervalMs']">
+                </div>
+                }
 
-        @if(hasParameter("EnvironmentVariables")){
-
-        <div class="mb-3">
-            <label class="form-label">Environment Variables</label>
-            <textarea type="text" class="form-control" placeholder="json - xml - text" rows="10"
-                [(ngModel)]="model.jobParameters['EnvironmentVariables']"></textarea>
-        </div>
-        }
-
-        @if(hasParameter("From")){
-        <div class="mb-3">
-            <label class="form-label">From</label>
-            <input type="text" class="form-control" [(ngModel)]="model.jobParameters['From']">
-        </div>
-        }
-
-        @if(hasParameter("To")){
-        <div class="mb-3">
-            <label class="form-label">To</label>
-            <input type="text" class="form-control" [(ngModel)]="model.jobParameters['To']">
-        </div>
-        }
+                @if(hasParameter("SleepTimeMs")){
+                <div class="mb-3">
+                    <label class="form-label">SleepTime (Ms)</label>
+                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['SleepTimeMs']">
+                </div>
+                }
 
 
-    </div>
-    <div class="card-footer">
-        <div class="d-flex gap-2 text-center pt-4">
-            <button (click)="close()" class="w-50 btn btn-light-brand">
+                @if(hasParameter("EnvironmentVariables")){
 
-                <i class="feather-x-square me-2"></i>
-                <span>Close</span>
-            </button>
-            <button (click)="save()" class="w-50 btn btn-primary">
-                <i class="feather-save me-2"></i>
-                <span>Save</span>
-            </button>
+                <div class="mb-3">
+                    <label class="form-label">Environment Variables</label>
+                    <textarea type="text" class="form-control" placeholder="json - xml - text" rows="10"
+                        [(ngModel)]="model.jobParameters['EnvironmentVariables']"></textarea>
+                </div>
+                }
+
+                @if(hasParameter("From")){
+                <div class="mb-3">
+                    <label class="form-label">From</label>
+                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['From']">
+                </div>
+                }
+
+                @if(hasParameter("To")){
+                <div class="mb-3">
+                    <label class="form-label">To</label>
+                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['To']">
+                </div>
+                }
+
+                <div class="mb-3">
+                    <label class="form-label">Next Jobs</label>
+                    <select class="form-control" [(ngModel)]="model.nextJob" multiple>
+                        @if (projectJobs) {
+                        @for (item of projectJobs; track item.id) {
+                        <option [value]="item.id">{{item.title}}</option>
+                        }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="card-footer position-absolute w-100 bottom-0">
+                <div class="d-flex gap-2 text-center pt-4">
+                    <button (click)="close()" class="w-50 btn btn-light-brand">
+
+                        <i class="feather-x-square me-2"></i>
+                        <span>Close</span>
+                    </button>
+                    <button (click)="save()" class="w-50 btn btn-primary">
+                        <i class="feather-save me-2"></i>
+                        <span>Save</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
 
     </div>

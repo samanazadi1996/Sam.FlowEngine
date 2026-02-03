@@ -8,6 +8,7 @@ import { ProjectDetails } from './pages/projects/project-details/project-details
 import { CreateProject } from './pages/projects/create-project/create-project';
 import { FormsModule } from '@angular/forms';
 import { UpdateJob } from './pages/projects/project-details/update-job/update-job';
+import { SharedModule } from '../../core/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -20,8 +21,8 @@ import { UpdateJob } from './pages/projects/project-details/update-job/update-jo
   imports: [
     CommonModule,
     MainRoutingModule,
-    FormsModule
-
+    FormsModule,
+    SharedModule
   ]
 })
 export class MainModule { }

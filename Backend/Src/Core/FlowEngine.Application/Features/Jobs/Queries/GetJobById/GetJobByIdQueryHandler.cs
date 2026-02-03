@@ -24,7 +24,7 @@ public class GetJobByIdQueryHandler(IJobRepository jobRepository) : IRequestHand
             Name = job.Name,
             NextJob = job.NextJob,
             Position = job.Position,           
-
+            ProjectId=job.Id
         };
     }
 }

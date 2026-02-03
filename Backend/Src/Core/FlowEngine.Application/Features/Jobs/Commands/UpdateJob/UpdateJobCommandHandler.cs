@@ -15,6 +15,7 @@ public class UpdateJobCommandHandler(IJobRepository jobRepository, IUnitOfWork u
 
         job.Name = request.Name;
         job.JobParameters ??= [];
+        job.NextJob = request.NextJob;
 
         foreach (var item in job.JobParameters)
         {

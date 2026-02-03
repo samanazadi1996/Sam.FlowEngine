@@ -9,6 +9,7 @@ import { StartProjectCommandInterface } from './interfaces/start-project-command
 import { BaseResultInterface } from './interfaces/base-result-interface';
 import { StopProjectCommandInterface } from './interfaces/stop-project-command-interface';
 import { CreateProjectCommandInterface } from './interfaces/create-project-command-interface';
+import { StringStringDictionaryBaseResultInterface } from './interfaces/string-string-dictionary-base-result-interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -45,6 +46,15 @@ export class ProjectService {
 
     postApiProjectCteateTemplate(templateName? :string | null) {
         return this.http.post<BaseResultInterface>(`${environment.serverUrl}/api/Project/CteateTemplate`, { });
+    }
+
+    getApiProjectGetProjectDataTemplate(projectId? :number | null) {
+
+        let params = new HttpParams();
+        if (projectId !== null && projectId !== undefined)
+            params = params.set('ProjectId', projectId);
+
+        return this.http.get<StringStringDictionaryBaseResultInterface>(`${environment.serverUrl}/api/Project/GetProjectDataTemplate`, { params });
     }
 
 }

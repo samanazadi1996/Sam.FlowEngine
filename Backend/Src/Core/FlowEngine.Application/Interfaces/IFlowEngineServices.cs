@@ -14,5 +14,6 @@ namespace FlowEngine.Application.Interfaces
 
 
         List<ProjectJob> GetAllJobs();
+        Dictionary<string,string> GetData(long projectId);
     }
 }

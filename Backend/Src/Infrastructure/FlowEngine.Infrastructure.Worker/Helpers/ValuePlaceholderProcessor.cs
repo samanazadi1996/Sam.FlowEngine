@@ -146,7 +146,7 @@ public static class ValuePlaceholderProcessor
             var replacements = GetReplacements();
             foreach (var item in replacements)
             {
-                template = template.Replace($"${{{item.Key}}}", item.Value, StringComparison.OrdinalIgnoreCase);
+                template = template.Replace($"${{{"System."+item.Key}}}", item.Value, StringComparison.OrdinalIgnoreCase);
             }
 
             return template;
@@ -156,24 +156,24 @@ public static class ValuePlaceholderProcessor
     {
         return new Dictionary<string, string>()
             {
-                { "System.DateTime.Now",DateTime.Now.ToString()},
-                { "System.DateTime.Now.Year",DateTime.Now.Year.ToString()},
-                { "System.DateTime.Now.Month",DateTime.Now.Month.ToString()},
-                { "System.DateTime.Now.Day",DateTime.Now.Day.ToString()},
-                { "System.DateTime.Now.Hour",DateTime.Now.Hour.ToString()},
-                { "System.DateTime.Now.Minute",DateTime.Now.Minute.ToString()},
-                { "System.DateTime.Now.Second",DateTime.Now.Second.ToString()},
-                { "System.DateTime.Now.Millisecond",DateTime.Now.Millisecond.ToString()},
-                { "System.DateTime.ShortDate", DateTime.Now.ToString("yyyy-MM-dd") },
-                { "System.DateTime.LongDate", DateTime.Now.ToString("dddd, MMMM dd, yyyy") },
-                { "System.DateTime.ShortTime", DateTime.Now.ToString("HH:mm") },
-                { "System.DateTime.LongTime", DateTime.Now.ToString("HH:mm:ss") },
-                { "System.DateTime.Timestamp", DateTime.Now.ToString("yyyyMMddHHmmssfff") },
-                { "System.DateTime.UnixTimestamp", ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString() },
+                { "DateTime.Now",DateTime.Now.ToString()},
+                { "DateTime.Now.Year",DateTime.Now.Year.ToString()},
+                { "DateTime.Now.Month",DateTime.Now.Month.ToString()},
+                { "DateTime.Now.Day",DateTime.Now.Day.ToString()},
+                { "DateTime.Now.Hour",DateTime.Now.Hour.ToString()},
+                { "DateTime.Now.Minute",DateTime.Now.Minute.ToString()},
+                { "DateTime.Now.Second",DateTime.Now.Second.ToString()},
+                { "DateTime.Now.Millisecond",DateTime.Now.Millisecond.ToString()},
+                { "DateTime.ShortDate", DateTime.Now.ToString("yyyy-MM-dd") },
+                { "DateTime.LongDate", DateTime.Now.ToString("dddd, MMMM dd, yyyy") },
+                { "DateTime.ShortTime", DateTime.Now.ToString("HH:mm") },
+                { "DateTime.LongTime", DateTime.Now.ToString("HH:mm:ss") },
+                { "DateTime.Timestamp", DateTime.Now.ToString("yyyyMMddHHmmssfff") },
+                { "DateTime.UnixTimestamp", ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString() },
 
-                { "System.Guid.New", Guid.NewGuid().ToString() },
-                { "System.Guid.New.Upper", Guid.NewGuid().ToString().ToUpper() },
-                { "System.Guid.New.NoDash", Guid.NewGuid().ToString().Replace("-", string.Empty) },
+                { "Guid.New", Guid.NewGuid().ToString() },
+                { "Guid.New.Upper", Guid.NewGuid().ToString().ToUpper() },
+                { "Guid.New.NoDash", Guid.NewGuid().ToString().Replace("-", string.Empty) },
             };
 
     }

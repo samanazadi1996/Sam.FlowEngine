@@ -162,7 +162,8 @@ export class ProjectDetails implements OnInit {
     const job = element.prop('data');
 
     const dialogRef = this.dialog.open(UpdateJob, {
-      width: '400px',
+      width: '1200px',
+      maxWidth: '1200px',
       panelClass: 'no-dialog-surface',
       data: { ...job },
       disableClose: true

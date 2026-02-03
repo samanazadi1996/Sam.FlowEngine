@@ -21,6 +21,7 @@ namespace FlowEngine.Domain.Projects.DTOs
                     JobParameters = j.JobParameters,
                     NextJob = j.NextJob,
                     Position = j.Position,
+                    ProjectId = j.ProjectId,
                 }).ToList(),
                 Started = p.Started
             }).ToList();
@@ -39,6 +40,7 @@ namespace FlowEngine.Domain.Projects.DTOs
                     JobParameters = j.JobParameters,
                     NextJob = j.NextJob,
                     Position = j.Position,
+                    ProjectId = j.ProjectId,
                 }).ToList(),
                 Started = p.Started
             };
@@ -52,6 +54,7 @@ namespace FlowEngine.Domain.Projects.DTOs
     public class ProjectJobDto
     {
         public long Id { get; set; }
+        public long ProjectId { get; set; }
         public string ClassName { get; set; }
         public string Name { get; set; }
         public Point? Position { get; set; }

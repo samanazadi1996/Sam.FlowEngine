@@ -2,8 +2,10 @@
 using FlowEngine.Application.Interfaces.Repositories;
 using FlowEngine.Domain.Projects.Entities;
 using FlowEngine.Infrastructure.Worker.Core;
+using FlowEngine.Infrastructure.Worker.Helpers;
 using FlowEngine.Infrastructure.Worker.Seeds;
 using System.Reflection;
+using System.Text.Json;
 
 namespace FlowEngine.Infrastructure.Worker.Services;
 
@@ -34,7 +36,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
         {
             var temp = new ProjectModel(data.ProjectName)
             {
-                Id=data.Id,
+                Id = data.Id,
                 Started = false,
                 Jobs = []
             };
@@ -181,6 +183,29 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
 
             result.Add(job);
         }
+        return result;
+    }
+
+    public Dictionary<string, string> GetData(long projectId)
+    {
+        var result = new Dictionary<string, string>()
+        {
+            { "System", JsonSerializer.Serialize(ValuePlaceholderProcessor.GetReplacements()) }
+        };
+
+        if (!flowEngineContext.Projects.TryGetValue(authenticatedUser.UserId, out var projects))
+            return [];
+
+        var project = projects.FirstOrDefault(p => p.Id.Equals(projectId));
+
+        if (project is null)
+            return [];
+        
+        foreach (var item in project.Data ?? [])
+        {
+            result.Add(item.Key, item.Value);
+        }
+
         return result;
     }
 }

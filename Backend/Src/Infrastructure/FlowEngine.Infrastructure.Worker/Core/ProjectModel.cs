@@ -38,7 +38,7 @@ public class ProjectModel(string name) : Project(name)
     public void Stop()
     {
         Started = false;
-        Data?.Clear();
+        //Data?.Clear();
     }
 
 }

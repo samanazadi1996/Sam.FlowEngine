@@ -3,6 +3,11 @@ import { JobService } from '../../../../../../core/services/job.service';
 import { GeneralService } from '../../../../../../core/services/general.service';
 import { ProjectJobDtoInterface } from '../../../../../../core/services/interfaces/project-job-dto-interface';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IdTitleDtoInterface } from '../../../../../../core/services/interfaces/id-title-dto-interface';
+import { ProjectService } from '../../../../../../core/services/project.service';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { getChildElementIndentation } from '@angular/cdk/schematics';
 
 @Component({
   selector: 'app-update-job',
@@ -11,20 +16,52 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrl: './update-job.scss',
 })
 export class UpdateJob implements OnInit {
+
+  treeControl = new NestedTreeControl<TreeNode>(node => node.children);
+  dataSource = new MatTreeNestedDataSource<TreeNode>();
+
   model?: ProjectJobDtoInterface;
+  projectJobs?: IdTitleDtoInterface[];
+  dataTemplate: any[] = [];
 
   constructor(
     private dialogRef: MatDialogRef<UpdateJob>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private cdr: ChangeDetectorRef,
-    private jobService: JobService, private generalService: GeneralService) {
+    private jobService: JobService,
+    private projectService: ProjectService,
+    private generalService: GeneralService) {
   }
+
+  hasChild = (_: number, node: TreeNode) =>
+    !!node.children && node.children.length > 0;
 
   ngOnInit(): void {
     this.loadData()
   }
 
   loadData() {
+    this.projectService.getApiProjectGetProjectDataTemplate(this.data.projectId)
+      .subscribe(response => {
+        if (this.generalService.isSuccess(response)) {
+
+
+          if (response.data) {
+            for (const [key, value] of Object.entries(response.data)) {
+              this.dataTemplate.push({ key: key, value: String(value) });
+            }
+          }
+          this.loadDataTemplate()
+          this.cdr.detectChanges();
+        }
+      })
+    this.jobService.getApiJobGetAllJobsByProjectId(this.data.projectId)
+      .subscribe(response => {
+        if (this.generalService.isSuccess(response)) {
+          this.projectJobs = response.data;
+          this.cdr.detectChanges();
+        }
+      })
     this.jobService.getApiJobGetJobById(this.data.id).subscribe(response => {
       if (this.generalService.isSuccess(response)) {
         this.model = response.data;
@@ -32,6 +69,7 @@ export class UpdateJob implements OnInit {
       }
     })
   }
+
   hasParameter(arg: string) {
     return (this.model!.jobParameters ?? [])[arg] != undefined
   }
@@ -41,22 +79,93 @@ export class UpdateJob implements OnInit {
   }
 
   save() {
-  const parameters: { [key: string]: string } = {};
+    const parameters: { [key: string]: string } = {};
+
+    if (this.model?.jobParameters) {
+      for (const [key, value] of Object.entries(this.model.jobParameters)) {
+        parameters[key] = String(value);
+      }
+    }
+
+    this.jobService.putApiJobUpdateJob({
+      id: this.model!.id,
+      name: this.model!.name,
+      parameters: parameters,
+      nextJob: this.model!.nextJob
+    }).subscribe(response => {
+      if (this.generalService.isSuccess(response)) {
+        this.dialogRef.close(this.data);
+      }
+    });
+  }
+  loadDataTemplate() {
+    this.dataSource.data = []
+    this.dataTemplate.forEach(item => {
+      this.dataSource.data.push({
+        name:"${"+ item.key+"}",
+        children: this.getChild(item.value,[item.key])
+      })
+    });
+  }
+
   
-  if (this.model?.jobParameters) {
-    for (const [key, value] of Object.entries(this.model.jobParameters)) {
-      parameters[key] = String(value);
+
+
+
+
+getChild(value: any, parentPath: string[] = []): TreeNode[] | undefined {
+  // تبدیل رشته JSON به آبجکت
+  if (typeof value === 'string') {
+    try {
+      value = JSON.parse(value);
+    } catch {
+      return undefined;
     }
   }
 
-  this.jobService.putApiJobUpdateJob({
-    id: this.model!.id,
-    name: this.model!.name,
-    parameters: parameters
-  }).subscribe(response => {
-    if (this.generalService.isSuccess(response)) {
-      this.dialogRef.close(this.data);
-    }
-  });
+  // اگر مقدار null یا undefined است
+  if (value == null) {
+    return undefined;
   }
+
+  // اگر آبجکت است (نه آرایه)
+  if (typeof value === 'object' && !Array.isArray(value)) {
+    return Object.entries(value).map(([key, val]) => {
+      const newPath = [...parentPath, key];
+      return {
+        name:"${"+ newPath.join('.')+"}", // مسیر با separator
+        children: this.getChild(val, newPath)
+      };
+    });
+  }
+
+  // اگر آرایه است
+  if (Array.isArray(value)) {
+    return value.map((item, index) => {
+      const newPath = [...parentPath, `[${index}]`];
+      return {
+        name:"${"+ newPath.join('.')+"}", // مسیر با separator
+        children: this.getChild(item, newPath)
+      };
+    });
+  }
+
+  // برای مقادیر اولیه
+  return undefined;
 }
+
+
+
+
+
+
+
+}
+
+interface TreeNode {
+  name: string;
+  children?: TreeNode[];
+  isLoading?: boolean;
+  hasChildren?: boolean;
+}
+
