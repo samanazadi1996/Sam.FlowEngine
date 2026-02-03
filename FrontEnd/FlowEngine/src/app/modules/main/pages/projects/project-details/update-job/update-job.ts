@@ -44,8 +44,6 @@ export class UpdateJob implements OnInit {
     this.projectService.getApiProjectGetProjectDataTemplate(this.data.projectId)
       .subscribe(response => {
         if (this.generalService.isSuccess(response)) {
-
-
           if (response.data) {
             for (const [key, value] of Object.entries(response.data)) {
               this.dataTemplate.push({ key: key, value: String(value) });
@@ -102,57 +100,48 @@ export class UpdateJob implements OnInit {
     this.dataSource.data = []
     this.dataTemplate.forEach(item => {
       this.dataSource.data.push({
-        name:"${"+ item.key+"}",
-        children: this.getChild(item.value,[item.key])
+        name: "${" + item.key + "}",
+        children: this.getChild(item.value, [item.key])
       })
     });
   }
 
-  
 
 
-
-
-getChild(value: any, parentPath: string[] = []): TreeNode[] | undefined {
-  // تبدیل رشته JSON به آبجکت
-  if (typeof value === 'string') {
-    try {
-      value = JSON.parse(value);
-    } catch {
+  getChild(value: any, parentPath: string[] = []): TreeNode[] | undefined {
+    if (typeof value === 'string') {
+      try {
+        value = JSON.parse(value);
+      } catch {
+        return undefined;
+      }
+    }
+    if (value == null) {
       return undefined;
     }
-  }
 
-  // اگر مقدار null یا undefined است
-  if (value == null) {
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      return Object.entries(value).map(([key, val]) => {
+        const newPath = [...parentPath, key];
+        return {
+          name: "${" + newPath.join('.') + "}",
+          children: this.getChild(val, newPath)
+        };
+      });
+    }
+
+    if (Array.isArray(value)) {
+      return value.map((item, index) => {
+        const newPath = [...parentPath, `[${index}]`];
+        return {
+          name: "${" + newPath.join('.') + "}",
+          children: this.getChild(item, newPath)
+        };
+      });
+    }
+
     return undefined;
   }
-
-  // اگر آبجکت است (نه آرایه)
-  if (typeof value === 'object' && !Array.isArray(value)) {
-    return Object.entries(value).map(([key, val]) => {
-      const newPath = [...parentPath, key];
-      return {
-        name:"${"+ newPath.join('.')+"}", // مسیر با separator
-        children: this.getChild(val, newPath)
-      };
-    });
-  }
-
-  // اگر آرایه است
-  if (Array.isArray(value)) {
-    return value.map((item, index) => {
-      const newPath = [...parentPath, `[${index}]`];
-      return {
-        name:"${"+ newPath.join('.')+"}", // مسیر با separator
-        children: this.getChild(item, newPath)
-      };
-    });
-  }
-
-  // برای مقادیر اولیه
-  return undefined;
-}
 
 
 
