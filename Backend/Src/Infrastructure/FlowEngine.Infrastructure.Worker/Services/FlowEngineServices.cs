@@ -1,5 +1,6 @@
 ﻿using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Interfaces.Repositories;
+using FlowEngine.Domain.Projects.DTOs;
 using FlowEngine.Domain.Projects.Entities;
 using FlowEngine.Infrastructure.Worker.Core;
 using FlowEngine.Infrastructure.Worker.Helpers;
@@ -172,16 +173,16 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
         }
     }
 
-    public List<ProjectJob> GetAllJobs()
+    public List<ProjectJobDto> GetAllJobs()
     {
-        List<ProjectJob> result = [];
+        List<ProjectJobDto> result = [];
         var jobs = Assembly.GetAssembly(typeof(IJob))!.GetTypes().Where(p => p.BaseType == typeof(IJob));
 
         foreach (var item in jobs)
         {
             var job = Activator.CreateInstance(item)! as IJob;
 
-            result.Add(job);
+            result.Add(ProjectJobDto.Parse(job!));
         }
         return result;
     }
@@ -200,7 +201,7 @@ public class FlowEngineServices(IUnitOfWork unitOfWork, FlowEngineContext flowEn
 
         if (project is null)
             return [];
-        
+
         foreach (var item in project.Data ?? [])
         {
             result.Add(item.Key, item.Value);

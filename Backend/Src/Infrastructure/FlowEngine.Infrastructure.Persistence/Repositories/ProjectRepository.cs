@@ -51,4 +51,13 @@ public class ProjectRepository(ApplicationDbContext dbContext) : GenericReposito
             .FirstOrDefaultAsync();
 
     }
+
+    public async Task<Project> GetProjectWithJobsByIdAsync(Guid userId, long projectId)
+    {
+        return await dbContext.Projects
+            .Where(p => p.Id == projectId)
+            .Where(p => p.CreatedBy == userId)
+            .Include(p => p.ProjectJobs)
+            .FirstOrDefaultAsync();
+    }
 }

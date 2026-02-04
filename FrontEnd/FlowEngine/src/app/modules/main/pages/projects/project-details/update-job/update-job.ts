@@ -56,7 +56,7 @@ export class UpdateJob implements OnInit {
     this.jobService.getApiJobGetAllJobsByProjectId(this.data.projectId)
       .subscribe(response => {
         if (this.generalService.isSuccess(response)) {
-          this.projectJobs = response.data;
+          this.projectJobs = response.data?.filter(p => p.id != this.data.id);
           this.cdr.detectChanges();
         }
       })
@@ -96,6 +96,7 @@ export class UpdateJob implements OnInit {
       }
     });
   }
+
   loadDataTemplate() {
     this.dataSource.data = []
     this.dataTemplate.forEach(item => {
@@ -145,6 +146,13 @@ export class UpdateJob implements OnInit {
 
 
 
+  delete() {
+    this.jobService.deleteApiJobDeleteJob(this.model!.id).subscribe(response => {
+      if (this.generalService.isSuccess(response)) {
+        this.dialogRef.close(this.data);
+      }
+    });
+  }
 
 
 
@@ -154,7 +162,5 @@ export class UpdateJob implements OnInit {
 interface TreeNode {
   name: string;
   children?: TreeNode[];
-  isLoading?: boolean;
-  hasChildren?: boolean;
 }
 

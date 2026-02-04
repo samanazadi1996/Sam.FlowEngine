@@ -1,20 +1,16 @@
 <div class="page-header">
     <div class="page-header-left d-flex align-items-center">
-        <div class="page-header-title">
-            <h5 class="m-b-10">Projects</h5>
-        </div>
         <ul class="breadcrumb">
-            <li class="breadcrumb-item">Main</li>
             <li class="breadcrumb-item">Projects</li>
         </ul>
     </div>
     <div class="ms-auto">
         <div class="page-header-right-items">
             <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                <a href="projects-create.html" class="btn btn-primary">
+                <button class="btn btn-primary btn-icon" (click)="createProject()">
                     <i class="feather-plus"></i>
                     <span class="d-none d-md-block">Create Prject</span>
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -41,9 +37,7 @@
                                     <td class="project-name-td">
                                         <div class="hstack gap-4">
                                             <div>
-                                                <a href="projects-view.html" class="text-truncate-1-line">
-                                                    {{item?.projectName}}
-                                                </a>
+                                                {{item?.projectName}}
                                             </div>
                                         </div>
                                     </td>
@@ -55,8 +49,7 @@
                                                 <i class="feather" [class.feather-pause]="item.started"
                                                     [class.feather-play]="!item.started"></i>
                                             </button>
-                                            <a class="btn btn-primary btn-icon"
-                                                [routerLink]="[item.projectName]">
+                                            <a class="btn btn-primary btn-icon" [routerLink]="[item.projectName]">
                                                 <i class="feather feather-eye"></i>
                                             </a>
                                         </div>

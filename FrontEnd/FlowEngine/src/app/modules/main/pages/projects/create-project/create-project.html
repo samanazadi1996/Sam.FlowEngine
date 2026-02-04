@@ -1,1 +1,29 @@
-<p>create-project works!</p>
+<div class="card stretch stretch-full">
+    <div class="card-header">
+        <h5 class="card-title">Create Project</h5>
+
+    </div>
+    <div class="card-body">
+
+        <div class="mb-3">
+            <label class="form-label">Project Name</label>
+            <input type="text" class="form-control" [(ngModel)]="model.projectName">
+        </div>
+
+    </div>
+
+    <div class="card-footer  w-100">
+        <div class="d-flex gap-2 text-center pt-4">
+            <button (click)="close()" class="w-50 btn btn-light-brand">
+
+                <i class="feather-x-square me-2"></i>
+                <span>Close</span>
+            </button>
+            <button (click)="save()" class="w-50 btn btn-primary">
+                <i class="feather-save me-2"></i>
+                <span>Save</span>
+            </button>
+        </div>
+    </div>
+
+</div>

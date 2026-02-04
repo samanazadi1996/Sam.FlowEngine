@@ -31,7 +31,7 @@ public sealed class Job_Random : IJob
             projectModel.Data ??= [];
             projectModel.Data[this.Name] = value.ToString();
 
-            ConsoleLogger.Log($"Generate RandoNumber {value}");
+            ConsoleLogger.Log($"Generate RandomNumber {value}");
 
             await GotoNextJob(projectModel, this.NextJob);
         }

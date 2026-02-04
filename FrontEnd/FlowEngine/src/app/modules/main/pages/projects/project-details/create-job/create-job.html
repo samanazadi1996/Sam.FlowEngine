@@ -1,0 +1,84 @@
+<div class="card stretch stretch-full">
+    <div class="card-header">
+        <h5 class="card-title">Create Job</h5>
+    </div>
+
+    <!-- بخش جستجو -->
+    <div class="card-body border-bottom">
+        <div class="mb-3">
+            <label class="form-label">Job Name</label>
+            <input type="text" class="form-control" [(ngModel)]="jobName">
+        </div>
+
+
+    </div>
+    <div class="card-body border-bottom">
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="feather-search"></i>
+            </span>
+            <input type="text" class="form-control" placeholder="Search jobs..." [(ngModel)]="searchText"
+                (ngModelChange)="onSearchChange()" aria-label="Search jobs">
+            <button *ngIf="searchText" class="btn btn-outline-secondary" type="button" (click)="clearSearch()">
+                <i class="feather-x"></i>
+            </button>
+        </div>
+        <small *ngIf="filteredJobs" class="text-muted mt-2 d-block">
+            {{ filteredJobs.length }} job(s) found
+        </small>
+    </div>
+
+    <div class="card-body" style="overflow-y: auto; max-height: 400px;">
+        @if(filteredJobs && filteredJobs.length > 0){
+        <table class="table table-hover">
+            <tbody>
+                @for (item of filteredJobs; track $index) {
+                <tr (click)="selectJob(item)" class="cursor-pointer">
+                    <td class="text-center" width="60px">
+                        <img [src]="item.icon" width="40" height="40" alt="{{item.name}}">
+                    </td>
+                    <td class="align-content-around">
+                        {{item.name}}
+                    </td>
+
+                    <td class="align-content-around">
+                        @if (item.selected) {
+
+                        <i class="feather-check"></i>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        } @else if (filteredJobs && filteredJobs.length === 0) {
+        <div class="text-center py-5">
+            <i class="feather-search" style="font-size: 48px; opacity: 0.3;"></i>
+            <p class="mt-3 text-muted">No jobs found matching "{{searchText}}"</p>
+            <button class="btn btn-sm btn-outline-secondary mx-auto" (click)="clearSearch()">
+                Clear search
+            </button>
+        </div>
+        } @else {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading jobs...</p>
+        </div>
+        }
+    </div>
+
+    <div class="card-footer w-100">
+        <div class="d-flex gap-2 text-center pt-4">
+            <button (click)="close()" class="w-50 btn btn-light-brand">
+                <i class="feather-x-square me-2"></i>
+                <span>Close</span>
+            </button>
+            <button (click)="save()" class="w-50 btn btn-primary">
+                <i class="feather-save me-2"></i>
+                <span>Save</span>
+            </button>
+        </div>
+    </div>
+</div>

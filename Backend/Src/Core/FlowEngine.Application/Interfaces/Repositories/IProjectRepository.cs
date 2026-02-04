@@ -11,5 +11,6 @@ public interface IProjectRepository : IGenericRepository<Project>
 {
     //Task<PaginationResponseDto<ProjectDto>> GetPagedListAsync(int pageNumber, int pageSize, string name);
     Task<List<Project>> GetAllAsync(Guid? userId, long? projectId);
-    Task<Project> GetByNameAsync(Guid guid, string projectName);
+    Task<Project> GetByNameAsync(Guid userId, string projectName);
+    Task<Project> GetProjectWithJobsByIdAsync(Guid userId, long projectId);
 }

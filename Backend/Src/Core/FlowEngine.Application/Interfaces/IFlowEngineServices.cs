@@ -1,4 +1,4 @@
-using FlowEngine.Domain.Projects.Entities;
+using FlowEngine.Domain.Projects.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,7 +13,7 @@ namespace FlowEngine.Application.Interfaces
         Task CteateTemplate(string templateName);
 
 
-        List<ProjectJob> GetAllJobs();
+        List<ProjectJobDto> GetAllJobs();
         Dictionary<string,string> GetData(long projectId);
     }
 }

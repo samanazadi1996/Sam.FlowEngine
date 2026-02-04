@@ -1,4 +1,5 @@
 ﻿using FlowEngine.Domain.Projects.Entities;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -60,5 +61,19 @@ namespace FlowEngine.Domain.Projects.DTOs
         public Point? Position { get; set; }
         public Dictionary<string, string?> JobParameters { get; set; }
         public List<long> NextJob { get; set; }
+
+        public static ProjectJobDto Parse(ProjectJob j)
+        {
+            return new ProjectJobDto()
+            {
+                Id = j.Id,
+                Name = j.Name,
+                ClassName = j.ClassName,
+                JobParameters = j.JobParameters,
+                NextJob = j.NextJob,
+                Position = j.Position,
+                ProjectId = j.ProjectId,
+            };
+        }
     }
 }

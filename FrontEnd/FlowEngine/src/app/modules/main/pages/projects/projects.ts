@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../../../core/services/project.service';
 import { GeneralService } from '../../../../core/services/general.service';
 import { GetUserProjectsResponseInterface } from '../../../../core/services/interfaces/get-user-projects-response-interface';
+import { CreateProject } from './create-project/create-project';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-projects',
@@ -12,7 +14,11 @@ import { GetUserProjectsResponseInterface } from '../../../../core/services/inte
 export class Projects implements OnInit {
   data?: GetUserProjectsResponseInterface[];
 
-  constructor(private projectService: ProjectService, private generalService: GeneralService,private cdr: ChangeDetectorRef) {
+  constructor(
+    private projectService: ProjectService,
+    private generalService: GeneralService,
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef) {
 
   }
   ngOnInit(): void {
@@ -24,21 +30,29 @@ export class Projects implements OnInit {
 
         if (this.generalService.isSuccess(response)) {
           this.data = response.data
-            this.cdr.detectChanges();
+          this.cdr.detectChanges();
         }
 
       })
 
   }
-stopStart(item: GetUserProjectsResponseInterface) {
-  const action$ = item.started
-    ? this.projectService.postApiProjectStopProject({ projectName: item.projectName })
-    : this.projectService.postApiProjectStartProject({ projectName: item.projectName });
+  stopStart(item: GetUserProjectsResponseInterface) {
+    const action$ = item.started
+      ? this.projectService.postApiProjectStopProject({ projectName: item.projectName })
+      : this.projectService.postApiProjectStartProject({ projectName: item.projectName });
 
-  action$.subscribe(response => {
-    if (this.generalService.isSuccess(response)) {
-      this.loadData();
-    }
-  });
-}
+    action$.subscribe(response => {
+      if (this.generalService.isSuccess(response)) {
+        this.loadData();
+      }
+    });
+  }
+
+  createProject() {
+    const dialogRef = this.dialog.open(CreateProject, {
+      width: '400px',
+      panelClass: 'no-dialog-surface',
+      disableClose: true
+    });
+  }
 }

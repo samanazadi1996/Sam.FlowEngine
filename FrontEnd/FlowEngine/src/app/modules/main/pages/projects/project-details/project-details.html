@@ -1,51 +1,29 @@
 <div class="page-header">
     <div class="page-header-left d-flex align-items-center">
-        <div class="page-header-title">
-            <h5 class="m-b-10">Projects</h5>
-        </div>
         <ul class="breadcrumb">
-            <li class="breadcrumb-item">Main</li>
             <li class="breadcrumb-item">Projects</li>
             <li class="breadcrumb-item">{{projectName}}</li>
         </ul>
     </div>
-    <div class="page-header-right ms-auto">
+    <div class="ms-auto">
         <div class="page-header-right-items">
             <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+
                 @if(data){
 
-                    <button (click)="stopStart()" class="btn btn-primary btn-icon">
-                        <i class="feather" [class.feather-pause]="data.started"
-                        [class.feather-play]="!data.started"></i>
-                    </button>
-                    
+                <button (click)="stopStart()" class="btn btn-primary btn-icon">
+                    <i class="feather" [class.feather-pause]="data.started" [class.feather-play]="!data.started"></i>
+                </button>
+
                 }
-                    
-                    <a href="projects-create.html" class="btn btn-primary">
-                    <i class="feather-plus me-2"></i>
-                    <span>Create Job</span>
-                </a>
+
+                <button href="projects-create.html" class="btn btn-primary btn-icon" (click)="createJob()">
+                    <i class="feather-plus"></i>
+                    <span class="d-none d-md-block">Create Job</span>
+                </button>
             </div>
-        </div>
-        <div class="d-md-none d-flex align-items-center">
-            <a href="javascript:void(0)" class="page-header-right-open-toggle">
-                <i class="feather-align-right fs-20"></i>
-            </a>
         </div>
     </div>
 </div>
 
-<!-- 
-<textarea
-  rows="10"
-  style="width:100%"
-  [(ngModel)]="diagramCode"
-  (input)="render()">
-</textarea>
-
-<div id="diagram" style="border:1px solid #ccc; margin-top:16px;"></div>
-
-<button (click)="saveSvg()">Save Diagram</button> -->
 <div #paperContainer class="diagram-container"></div>
-
-<!-- <button (click)="save()">Save</button> -->

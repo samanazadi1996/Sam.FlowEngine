@@ -7,6 +7,7 @@ import { ProjectDtoInterface } from '../../../../../core/services/interfaces/pro
 import { JobService } from '../../../../../core/services/job.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateJob } from './update-job/update-job';
+import { CreateJob } from './create-job/create-job';
 
 @Component({
   selector: 'app-project-details',
@@ -15,20 +16,6 @@ import { UpdateJob } from './update-job/update-job';
   styleUrl: './project-details.scss',
 })
 export class ProjectDetails implements OnInit {
-  stopStart() {
-
-    const action$ = this.data!.started
-      ? this.projectService.postApiProjectStopProject({ projectName: this.data!.projectName })
-      : this.projectService.postApiProjectStartProject({ projectName: this.data!.projectName });
-
-    action$.subscribe(response => {
-      if (this.generalService.isSuccess(response)) {
-        this.data!.started = !this.data!.started
-          this.cdr.detectChanges();
-      }
-    });
-
-  }
   data?: ProjectDtoInterface;
   projectName?: string;
   @ViewChild('paperContainer', { static: true })
@@ -55,7 +42,7 @@ export class ProjectDetails implements OnInit {
       if (this.generalService.isSuccess(response))
         this.data = response.data;
       this.renderFromData();
-          this.cdr.detectChanges();
+      this.cdr.detectChanges();
 
     })
   }
@@ -173,7 +160,20 @@ export class ProjectDetails implements OnInit {
     });
 
   }
+  createJob() {
+    const dialogRef = this.dialog.open(CreateJob, {
+      width: '400px',
+      panelClass: 'no-dialog-surface',
+      data: this.data?.id,
+      disableClose: true
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      this.configureGraph()
+      this.loadData()
+    });
+
+  }
   onNodeClick(element: any) {
     const job = element.prop('data');
 
@@ -208,6 +208,20 @@ export class ProjectDetails implements OnInit {
             }
         })
     }
+  }
+  stopStart() {
+
+    const action$ = this.data!.started
+      ? this.projectService.postApiProjectStopProject({ projectName: this.data!.projectName })
+      : this.projectService.postApiProjectStartProject({ projectName: this.data!.projectName });
+
+    action$.subscribe(response => {
+      if (this.generalService.isSuccess(response)) {
+        this.data!.started = !this.data!.started
+        this.cdr.detectChanges();
+      }
+    });
+
   }
 
 }
