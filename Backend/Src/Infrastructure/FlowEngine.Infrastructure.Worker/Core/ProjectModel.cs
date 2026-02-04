@@ -14,6 +14,7 @@ public class ProjectModel(string name) : Project(name)
     {
         if (Started) return;
 
+        Data?.Clear();
         Started = true;
 
         Type[] starterJobs = [typeof(Job_Start), typeof(Job_Timer)];
@@ -38,7 +39,6 @@ public class ProjectModel(string name) : Project(name)
     public void Stop()
     {
         Started = false;
-        //Data?.Clear();
     }
 
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { GeneralService } from '../../../../../core/services/general.service';
 import { ProjectService } from '../../../../../core/services/project.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,20 @@ import { UpdateJob } from './update-job/update-job';
   styleUrl: './project-details.scss',
 })
 export class ProjectDetails implements OnInit {
+  stopStart() {
+
+    const action$ = this.data!.started
+      ? this.projectService.postApiProjectStopProject({ projectName: this.data!.projectName })
+      : this.projectService.postApiProjectStartProject({ projectName: this.data!.projectName });
+
+    action$.subscribe(response => {
+      if (this.generalService.isSuccess(response)) {
+        this.data!.started = !this.data!.started
+          this.cdr.detectChanges();
+      }
+    });
+
+  }
   data?: ProjectDtoInterface;
   projectName?: string;
   @ViewChild('paperContainer', { static: true })
@@ -27,6 +41,7 @@ export class ProjectDetails implements OnInit {
     private projectService: ProjectService,
     private jobService: JobService,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
     private route: ActivatedRoute) {
   }
 
@@ -40,6 +55,7 @@ export class ProjectDetails implements OnInit {
       if (this.generalService.isSuccess(response))
         this.data = response.data;
       this.renderFromData();
+          this.cdr.detectChanges();
 
     })
   }
