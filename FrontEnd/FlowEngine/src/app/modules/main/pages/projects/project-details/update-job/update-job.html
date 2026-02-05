@@ -2,10 +2,21 @@
 <div class="card stretch stretch-full">
     <div class="card-header">
         <h5 class="card-title">Update Job</h5>
-
+        <div class="dropdown">
+            <a href="javascript:void(0);" class="avatar-text avatar-md" data-bs-toggle="dropdown" data-bs-offset="0,22"
+                aria-expanded="false">
+                <i class="feather-more-vertical"></i>
+            </a>
+            <div class="dropdown-menu" style="">
+                <a href="javascript:void(0);" class="dropdown-item" (click)="delete()">
+                    <i class="feather-trash-2 me-3"></i>
+                    <span>Delete</span>
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="d-flex" style="    max-height: 70vh;height: 70vh;">
-        <div class="col-5 overflow-scroll" >
+    <div class="d-flex" style="max-height: 70vh;">
+        <div class="col-5 overflow-scroll">
             @if (dataTemplate) {
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
@@ -34,7 +45,7 @@
             }
         </div>
 
-        <div class="col-7 overflow-scroll position-relative" >
+        <div class="col-7 overflow-scroll position-relative">
             <div class="card-body">
 
                 <div class="mb-3">
@@ -80,6 +91,41 @@
                 </div>
                 }
 
+                @if(hasParameter("Url")){
+                <div class="mb-3">
+                    <label class="form-label">Url</label>
+                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['Url']">
+                </div>
+                }
+                @if (hasParameter("Method")) {
+                <div class="mb-3">
+                    <label class="form-label">Method</label>
+                    <select class="form-control" [(ngModel)]="model.jobParameters['Method']">
+                        @for (item of httpMethods; track item) {
+                        <option [value]="item">{{item}}</option>
+                        }
+                    </select>
+                </div>
+                }
+
+                @if(hasParameter("Body")){
+
+                <div class="mb-3">
+                    <label class="form-label">Body</label>
+                    <textarea type="text" class="form-control" placeholder="json - xml - text" rows="10"
+                        [(ngModel)]="model.jobParameters['Body']"></textarea>
+                </div>
+                }
+
+                @if(hasParameter("Headers")){
+
+                <div class="mb-3">
+                    <label class="form-label">Headers</label>
+                    <textarea type="text" class="form-control" [(ngModel)]="model.jobParameters['Headers']"></textarea>
+                </div>
+                }
+
+
                 @if (projectJobs) {
                 <div class="mb-3">
                     <label class="form-label">Next Jobs</label>
@@ -89,15 +135,10 @@
                         }
                     </select>
                 </div>
-            }
+                }
             </div>
-            <div class="card-footer position-absolute w-100 bottom-0">
+            <div class="w-100 p-4">
                 <div class="d-flex gap-2 text-center pt-4">
-                    <button (click)="delete()" class="w-50 btn btn-danger">
-                        <i class="feather-trash me-2"></i>
-                        <span>Delete</span>
-                    </button>
-
                     <button (click)="close()" class="w-50 btn btn-light-brand">
 
                         <i class="feather-x-square me-2"></i>

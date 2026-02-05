@@ -23,7 +23,7 @@ export class UpdateJob implements OnInit {
   model?: ProjectJobDtoInterface;
   projectJobs?: IdTitleDtoInterface[];
   dataTemplate: any[] = [];
-
+  httpMethods = ['Get', 'Post', 'Put', 'Delete', 'Patch', 'Options', 'Head', 'Query', 'Connect', 'Trace',]
   constructor(
     private dialogRef: MatDialogRef<UpdateJob>,
     @Inject(MAT_DIALOG_DATA) public data: any,
