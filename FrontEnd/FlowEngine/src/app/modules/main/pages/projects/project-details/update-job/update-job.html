@@ -7,7 +7,7 @@
                 aria-expanded="false">
                 <i class="feather-more-vertical"></i>
             </a>
-            <div class="dropdown-menu" style="">
+            <div class="dropdown-menu">
                 <a href="javascript:void(0);" class="dropdown-item" (click)="delete()">
                     <i class="feather-trash-2 me-3"></i>
                     <span>Delete</span>
@@ -47,82 +47,38 @@
 
         <div class="col-7 overflow-scroll position-relative">
             <div class="card-body">
-
                 <div class="mb-3">
                     <label class="form-label">Job Name</label>
                     <input type="text" class="form-control" [(ngModel)]="model.name">
                 </div>
-                @if(hasParameter("IntervalMs")){
-
-                <div class="mb-3">
-                    <label class="form-label">Interval (Ms)</label>
-                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['IntervalMs']">
-                </div>
+                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Start')
+                {
+                <app-job-start-form [model]="model"></app-job-start-form>
                 }
 
-                @if(hasParameter("SleepTimeMs")){
-                <div class="mb-3">
-                    <label class="form-label">SleepTime (Ms)</label>
-                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['SleepTimeMs']">
-                </div>
+                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Timer')
+                {
+                <app-job-timer-form [model]="model"></app-job-timer-form>
                 }
 
-
-                @if(hasParameter("EnvironmentVariables")){
-
-                <div class="mb-3">
-                    <label class="form-label">Environment Variables</label>
-                    <textarea type="text" class="form-control" placeholder="json - xml - text" rows="10"
-                        [(ngModel)]="model.jobParameters['EnvironmentVariables']"></textarea>
-                </div>
+                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Random')
+                {
+                <app-job-random-form [model]="model"></app-job-random-form>
                 }
 
-                @if(hasParameter("From")){
-                <div class="mb-3">
-                    <label class="form-label">From</label>
-                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['From']">
-                </div>
+                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_HttpRequest')
+                {
+                <app-job-http-request-form [model]="model"></app-job-http-request-form>
                 }
 
-                @if(hasParameter("To")){
-                <div class="mb-3">
-                    <label class="form-label">To</label>
-                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['To']">
-                </div>
+                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Sleep')
+                {
+                <app-job-sleep-form [model]="model"></app-job-sleep-form>
                 }
 
-                @if(hasParameter("Url")){
-                <div class="mb-3">
-                    <label class="form-label">Url</label>
-                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['Url']">
-                </div>
-                }
-                @if (hasParameter("Method")) {
-                <div class="mb-3">
-                    <label class="form-label">Method</label>
-                    <select class="form-control" [(ngModel)]="model.jobParameters['Method']">
-                        @for (item of httpMethods; track item) {
-                        <option [value]="item">{{item}}</option>
-                        }
-                    </select>
-                </div>
-                }
-
-                @if(hasParameter("Body")){
-
-                <div class="mb-3">
-                    <label class="form-label">Body</label>
-                    <textarea type="text" class="form-control" placeholder="json - xml - text" rows="10"
-                        [(ngModel)]="model.jobParameters['Body']"></textarea>
-                </div>
-                }
-
-                @if(hasParameter("Headers")){
-
-                <div class="mb-3">
-                    <label class="form-label">Headers</label>
-                    <textarea type="text" class="form-control" [(ngModel)]="model.jobParameters['Headers']"></textarea>
-                </div>
+                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_If')
+                {
+                <app-job-if-form [model]="model"></app-job-if-form>
                 }
 
 

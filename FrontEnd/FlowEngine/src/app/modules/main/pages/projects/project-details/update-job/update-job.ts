@@ -8,6 +8,7 @@ import { ProjectService } from '../../../../../../core/services/project.service'
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { getChildElementIndentation } from '@angular/cdk/schematics';
+import { JobStartForm } from './job-start-form/job-start-form';
 
 @Component({
   selector: 'app-update-job',
@@ -23,7 +24,6 @@ export class UpdateJob implements OnInit {
   model?: ProjectJobDtoInterface;
   projectJobs?: IdTitleDtoInterface[];
   dataTemplate: any[] = [];
-  httpMethods = ['Get', 'Post', 'Put', 'Delete', 'Patch', 'Options', 'Head', 'Query', 'Connect', 'Trace',]
   constructor(
     private dialogRef: MatDialogRef<UpdateJob>,
     @Inject(MAT_DIALOG_DATA) public data: any,
