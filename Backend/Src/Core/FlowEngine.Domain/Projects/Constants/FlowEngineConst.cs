@@ -10,6 +10,9 @@
         public const string SleepTimeMs = "SleepTimeMs";
         public const string IntervalMs = "IntervalMs";
 
+        public const string Query = "Query";
+        public const string ConnectionString = "ConnectionString";
+
 
         public const string Url = "Url";
         public const string Body = "Body";

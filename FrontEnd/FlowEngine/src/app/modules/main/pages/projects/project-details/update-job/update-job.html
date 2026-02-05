@@ -80,6 +80,10 @@
                 {
                 <app-job-if-form [model]="model"></app-job-if-form>
                 }
+                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_SqlServer')
+                {
+                <app-job-sql-server-form [model]="model"></app-job-sql-server-form>
+                }
 
 
                 @if (projectJobs) {

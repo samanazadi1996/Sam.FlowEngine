@@ -31,7 +31,7 @@ export class CreateJob implements OnInit {
       if (this.generalService.isSuccess(response)) {
         response.data!.forEach(item => {
           var nameSplited = item.className?.split(".");
-          const jobName = nameSplited![nameSplited!.length - 1].replace('_', ' ');
+          const jobName = nameSplited![nameSplited!.length - 1].replace('Job_', '');
 
           this.allJobs!.push({
             icon: `/icon/jobs/${item.className}.svg`,

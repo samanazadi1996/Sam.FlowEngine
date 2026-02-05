@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\Core\FlowEngine.Application\FlowEngine.Application.csproj" />
 		<ProjectReference Include="..\..\Core\FlowEngine.Domain\FlowEngine.Domain.csproj" />
 	</ItemGroup>

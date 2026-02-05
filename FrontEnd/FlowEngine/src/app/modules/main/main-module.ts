@@ -16,6 +16,7 @@ import { JobSleepForm } from './pages/projects/project-details/update-job/job-sl
 import { JobHttpRequestForm } from './pages/projects/project-details/update-job/job-http-request-form/job-http-request-form';
 import { JobTimerForm } from './pages/projects/project-details/update-job/job-timer-form/job-timer-form';
 import { JobIfForm } from './pages/projects/project-details/update-job/job-if-form/job-if-form';
+import { JobSqlServerForm } from './pages/projects/project-details/update-job/job-sql-server-form/job-sql-server-form';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { JobIfForm } from './pages/projects/project-details/update-job/job-if-fo
     JobHttpRequestForm,
     JobTimerForm,
     JobIfForm,
+    JobSqlServerForm,
   ],
   imports: [
     CommonModule,
