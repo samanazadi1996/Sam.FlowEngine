@@ -26,7 +26,6 @@ export class CreateJob implements OnInit {
   }
 
   ngOnInit(): void {
-    this.jobName = 'Job_' + String(Math.random()).split('.')[1]
     this.jobService.getApiJobGetAllJobs().subscribe(response => {
       if (this.generalService.isSuccess(response)) {
         response.data!.forEach(item => {
@@ -77,7 +76,7 @@ export class CreateJob implements OnInit {
     if (selectedJob?.length != 1) return;
 
     this.jobService.postApiJobCreateJob({
-      projectId: this.data,
+      projectId: this.data.projectId,
       className: selectedJob[0].originalName,
       name: this.jobName
     }).subscribe(response => {
@@ -88,6 +87,10 @@ export class CreateJob implements OnInit {
   }
 
   selectJob(job: any): void {
+    var uniqueNumber = ((this.data.allJobs as any[]).filter(p => p == job.originalName).length) + 1
+
+    this.jobName = `Job_${job.name}_${uniqueNumber}`
+
     this.allJobs?.forEach(element => {
       element.selected = false
     });

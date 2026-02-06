@@ -77,11 +77,11 @@ export class UpdateJob implements OnInit {
   }
 
   save() {
-    const parameters: { [key: string]: string } = {};
+    const parameters: { [key: string]: string | null } = {};
 
     if (this.model?.jobParameters) {
       for (const [key, value] of Object.entries(this.model.jobParameters)) {
-        parameters[key] = String(value);
+        parameters[key] = value ? String(value) : null;
       }
     }
 

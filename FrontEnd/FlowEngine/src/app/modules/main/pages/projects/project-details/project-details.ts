@@ -164,7 +164,10 @@ export class ProjectDetails implements OnInit {
     const dialogRef = this.dialog.open(CreateJob, {
       width: '400px',
       panelClass: 'no-dialog-surface',
-      data: this.data?.id,
+      data: {
+        projectId: this.data?.id,
+        allJobs: this.data?.jobs?.map(x => x.className ) ?? []
+      },
       disableClose: true
     });
 

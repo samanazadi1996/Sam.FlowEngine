@@ -84,6 +84,10 @@
                 {
                 <app-job-sql-server-form [model]="model"></app-job-sql-server-form>
                 }
+                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_For')
+                {
+                <app-job-for-form [model]="model"></app-job-for-form>
+                }
 
 
                 @if (projectJobs) {
