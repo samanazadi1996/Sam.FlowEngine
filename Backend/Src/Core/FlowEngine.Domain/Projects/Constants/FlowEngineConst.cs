@@ -20,5 +20,6 @@
         public const string Expression = "Expression";
 
         public const string Headers = "Headers";
+        public const string Step = "Step";
     }
 }

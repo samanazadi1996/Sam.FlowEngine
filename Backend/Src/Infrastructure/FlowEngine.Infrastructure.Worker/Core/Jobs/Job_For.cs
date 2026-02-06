@@ -13,6 +13,7 @@ public sealed class Job_For : IJob
         {
             { FlowEngineConst.From,"1"},
             { FlowEngineConst.To,"10" },
+            { FlowEngineConst.Step,"1" },
         };
     }
 
@@ -24,10 +25,11 @@ public sealed class Job_For : IJob
             var from = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.From));
 
             var to = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.To));
+            var step = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.Step));
 
             ConsoleLogger.Log($"Run Loop From: {from} To: {to}");
 
-            for (global::System.Int32 i = from; i < to; i++)
+            for (global::System.Int32 i = from; i < to; i += step)
             {
                 await GotoNextJob(projectModel, this.NextJob);
 

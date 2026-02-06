@@ -8,9 +8,17 @@
                 <i class="feather-more-vertical"></i>
             </a>
             <div class="dropdown-menu">
+                <a href="javascript:void(0);" class="dropdown-item" (click)="save()">
+                    <i class="feather-save me-3"></i>
+                    <span>Save</span>
+                </a>
                 <a href="javascript:void(0);" class="dropdown-item" (click)="delete()">
                     <i class="feather-trash-2 me-3"></i>
                     <span>Delete</span>
+                </a>
+                <a href="javascript:void(0);" class="dropdown-item" (click)="close()">
+                    <i class="feather-x-square me-3"></i>
+                    <span>Close</span>
                 </a>
             </div>
         </div>
@@ -51,44 +59,33 @@
                     <label class="form-label">Job Name</label>
                     <input type="text" class="form-control" [(ngModel)]="model.name">
                 </div>
-                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Start')
-                {
-                <app-job-start-form [model]="model"></app-job-start-form>
-                }
 
-                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Timer')
-                {
-                <app-job-timer-form [model]="model"></app-job-timer-form>
+                @switch(model.className) {
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Start') {
+                        <app-job-start-form [model]="model"></app-job-start-form>
+                    }
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Timer') {
+                        <app-job-timer-form [model]="model"></app-job-timer-form>
+                    }
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Random') {
+                        <app-job-random-form [model]="model"></app-job-random-form>
+                    }
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_HttpRequest') {
+                        <app-job-http-request-form [model]="model"></app-job-http-request-form>
+                    }
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Sleep') {
+                        <app-job-sleep-form [model]="model"></app-job-sleep-form>
+                    }
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_If') {
+                        <app-job-if-form [model]="model"></app-job-if-form>
+                    }
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_SqlServer') {
+                        <app-job-sql-server-form [model]="model"></app-job-sql-server-form>
+                    }
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_For') {
+                        <app-job-for-form [model]="model"></app-job-for-form>
+                    }
                 }
-
-                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Random')
-                {
-                <app-job-random-form [model]="model"></app-job-random-form>
-                }
-
-                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_HttpRequest')
-                {
-                <app-job-http-request-form [model]="model"></app-job-http-request-form>
-                }
-
-                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Sleep')
-                {
-                <app-job-sleep-form [model]="model"></app-job-sleep-form>
-                }
-
-                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_If')
-                {
-                <app-job-if-form [model]="model"></app-job-if-form>
-                }
-                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_SqlServer')
-                {
-                <app-job-sql-server-form [model]="model"></app-job-sql-server-form>
-                }
-                @if(model.className=='FlowEngine.Infrastructure.Worker.Core.Jobs.Job_For')
-                {
-                <app-job-for-form [model]="model"></app-job-for-form>
-                }
-
 
                 @if (projectJobs) {
                 <div class="mb-3">
