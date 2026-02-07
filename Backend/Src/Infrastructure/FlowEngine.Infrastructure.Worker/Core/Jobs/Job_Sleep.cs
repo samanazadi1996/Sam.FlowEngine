@@ -25,7 +25,7 @@ public sealed class Job_Sleep : IJob
 
             ConsoleLogger.Log($"Sleep {sleepTimeMs} ms");
 
-            Thread.Sleep(sleepTimeMs);
+            await Task.Delay(sleepTimeMs);
 
             await GotoNextJob(projectModel, this.NextJob);
 

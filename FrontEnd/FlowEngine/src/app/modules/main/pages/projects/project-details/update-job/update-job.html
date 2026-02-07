@@ -85,6 +85,9 @@
                     @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_For') {
                         <app-job-for-form [model]="model"></app-job-for-form>
                     }
+                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Schedule') {
+                        <app-job-schedule-form [model]="model"></app-job-schedule-form>
+                    }
                 }
 
                 @if (projectJobs) {

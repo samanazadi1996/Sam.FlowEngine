@@ -22,5 +22,6 @@
         public const string Headers = "Headers";
         public const string Step = "Step";
         public const string ForTask = "ForTask";
+        public const string CronExpression = "CronExpression";
     }
 }

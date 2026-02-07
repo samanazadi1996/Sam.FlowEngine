@@ -17,7 +17,7 @@ public class ProjectModel(string name) : Project(name)
         Data?.Clear();
         Started = true;
 
-        Type[] starterJobs = [typeof(Job_Start), typeof(Job_Timer)];
+        Type[] starterJobs = [typeof(Job_Start), typeof(Job_Timer), typeof(Job_Schedule)];
 
 
         foreach (var job in Jobs.Where(j => starterJobs.Contains(j.GetType())))

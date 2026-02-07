@@ -34,7 +34,7 @@ public sealed class Job_Timer : IJob
 
                 await GotoNextJob(projectModel, this.NextJob);
 
-                Thread.Sleep(interval);
+                await Task.Delay(interval);
             }
         }
         catch (Exception ex)

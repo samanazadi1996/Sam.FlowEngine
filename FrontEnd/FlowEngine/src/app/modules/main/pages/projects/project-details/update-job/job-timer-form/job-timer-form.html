@@ -1,4 +1,10 @@
-                <div class="mb-3">
-                    <label class="form-label">Interval (Ms)</label>
-                    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['IntervalMs']">
-                </div>
+<div class="mb-3">
+    <label class="form-label">Interval (Ms)</label>
+    <input type="text" class="form-control" [(ngModel)]="model.jobParameters['IntervalMs']">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Environment Variables</label>
+    <textarea type="text" class="form-control" placeholder="json - xml - text" rows="10"
+        [(ngModel)]="model.jobParameters['EnvironmentVariables']"></textarea>
+</div>
