@@ -1,7 +1,7 @@
 using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Interfaces.Repositories;
 using FlowEngine.Application.Wrappers;
-using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,8 +13,13 @@ public class UpdateJobCommandHandler(IJobRepository jobRepository, IUnitOfWork u
     {
         var job = await jobRepository.GetByIdAsync(request.Id);
 
+        var tempJob = flowEngineServices.GetAllJobs().FirstOrDefault(p => p.ClassName == job.ClassName);
+
+        if (tempJob == null)
+            return new Error(ErrorCode.NotFound, job.ClassName);
+
         job.Name = request.Name;
-        job.JobParameters ??= [];
+        job.JobParameters ??= tempJob.JobParameters.ToDictionary(x => x.Key, p => (string?)null);
         job.NextJob = request.NextJob;
 
         foreach (var item in job.JobParameters)
@@ -22,10 +27,6 @@ public class UpdateJobCommandHandler(IJobRepository jobRepository, IUnitOfWork u
             if (request.Parameters.TryGetValue(item.Key, out var newValue))
             {
                 job.JobParameters[item.Key] = newValue;
-            }
-            else
-            {
-                job.JobParameters[item.Key] = null;
             }
         }
 

@@ -18,7 +18,7 @@ public sealed class Job_HttpRequest : IJob
             { FlowEngineConst.Url,null},
             { FlowEngineConst.Body,null},
             { FlowEngineConst.Headers,null},
-        }; 
+        };
     }
 
     public override async Task Execute(ProjectModel projectModel)
@@ -39,17 +39,15 @@ public sealed class Job_HttpRequest : IJob
 
             if (!string.IsNullOrWhiteSpace(headers))
             {
-                foreach (var line in headers.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+                var dicHeadres = JsonSerializer.Deserialize<List<KeyValuePair<string, string>>>(headers);
+                if (dicHeadres is not null)
                 {
-                    var index = line.IndexOf(':');
-                    if (index <= 0) continue;
-
-                    var key = line[..index].Trim();
-                    var value = line[(index + 1)..].Trim();
-
-                    if (!request.Headers.TryAddWithoutValidation(key, value))
+                    foreach (var item in dicHeadres)
                     {
-                        request.Content?.Headers.TryAddWithoutValidation(key, value);
+                        if (!request.Headers.TryAddWithoutValidation(item.Key, item.Value))
+                        {
+                            request.Content?.Headers.TryAddWithoutValidation(item.Key, item.Value);
+                        }
                     }
                 }
             }

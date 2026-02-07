@@ -15,7 +15,40 @@
     <textarea type="text" class="form-control" placeholder="json - xml - text" rows="5"
         [(ngModel)]="model.jobParameters['Body']"></textarea>
 </div>
+
 <div class="mb-3">
     <label class="form-label">Headers</label>
-    <textarea type="text" class="form-control" [(ngModel)]="model.jobParameters['Headers']"></textarea>
+
+    <table class="table table-sm table-striped">
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th [width]="10">
+                <button class="btn btn-sm btn-success w-100 mx-1" (click)="addHeader()">
+                    <i class="feather-plus"></i>
+                </button>
+            </th>
+        </tr>
+        @for (item of headers; track $index) {
+        <tr>
+            <td>
+                <input type="text" [(ngModel)]="item.key" class="form-control" [readOnly]="item.readonly" (change)="onchange()">
+            </td>
+            <td>
+                <input type="text" [(ngModel)]="item.value" class="form-control" [readOnly]="item.readonly" (change)="onchange()">
+            </td>
+            <td class="d-flex">
+                <button class="btn btn-danger mx-1" (click)="deleteHeader(item)">
+                    <i class="feather-x"></i>
+                </button>
+
+                <button class="btn btn-primary" (click)="editHeader(item)">
+                    <i [class.feather-edit]="item.readonly" [class.feather-lock]="!item.readonly"></i>
+                </button>
+
+            </td>
+        </tr>
+        }
+    </table>
+
 </div>
