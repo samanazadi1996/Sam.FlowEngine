@@ -6,7 +6,7 @@
 @if (projectJobs) {
 <div class="mb-3">
     <label class="form-label">True</label>
-    <select class="form-control" [(ngModel)]="model.jobParameters['True']">
+    <select class="form-control" [(ngModel)]="model.jobParameters['IfTrue']">
         <option [value]="''">-- Select -- </option>
         @for (item of projectJobs; track item.id) {
         <option [value]="item.id">{{item.title}}</option>
@@ -15,7 +15,7 @@
 </div>
 <div class="mb-3">
     <label class="form-label">False</label>
-    <select class="form-control" [(ngModel)]="model.jobParameters['False']">
+    <select class="form-control" [(ngModel)]="model.jobParameters['IfFalse']">
         <option [value]="''">-- Select -- </option>
         @for (item of projectJobs; track item.id) {
         <option [value]="item.id">{{item.title}}</option>

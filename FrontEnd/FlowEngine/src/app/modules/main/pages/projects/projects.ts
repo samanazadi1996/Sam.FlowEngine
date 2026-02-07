@@ -52,7 +52,8 @@ export class Projects implements OnInit {
     const dialogRef = this.dialog.open(CreateProject, {
       width: '400px',
       panelClass: 'no-dialog-surface',
-      disableClose: true
+      disableClose: true,
+      data: { countProjects: this.data?.length ?? 0 }
     });
   }
 }

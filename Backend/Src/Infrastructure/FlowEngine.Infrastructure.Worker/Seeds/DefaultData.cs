@@ -107,8 +107,8 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
             };
             var paramsNextJobs = new List<Tuple<string, string, string>>
             {
-               new ( "If",FlowEngineConst.True,"HttpRequest1" ),
-                new( "If",FlowEngineConst.False,"HttpRequest2" ),
+               new ( "If",FlowEngineConst.IfTrue,"HttpRequest1" ),
+                new( "If",FlowEngineConst.IfFalse,"HttpRequest2" ),
             };
 
             var project = new Project("Test3")

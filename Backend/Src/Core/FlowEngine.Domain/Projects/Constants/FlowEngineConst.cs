@@ -5,8 +5,8 @@
         public const string EnvironmentVariables = "EnvironmentVariables";
         public const string From = "From";
         public const string To = "To";
-        public const string True = "True";
-        public const string False = "False";
+        public const string IfTrue = "IfTrue";
+        public const string IfFalse = "IfFalse";
         public const string SleepTimeMs = "SleepTimeMs";
         public const string IntervalMs = "IntervalMs";
 

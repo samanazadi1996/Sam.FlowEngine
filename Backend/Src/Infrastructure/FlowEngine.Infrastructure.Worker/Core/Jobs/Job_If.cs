@@ -13,8 +13,8 @@ public sealed class Job_If : IJob
         JobParameters = new()
         {
             { FlowEngineConst.Expression,null},
-            { FlowEngineConst.True,null},
-            { FlowEngineConst.False,null},
+            { FlowEngineConst.IfTrue,null},
+            { FlowEngineConst.IfFalse,null},
         };
     }
     public override async Task Execute(ProjectModel projectModel)
@@ -28,14 +28,14 @@ public sealed class Job_If : IJob
 
             if (EvaluateBoolExpression(expression))
             {
-                var t = projectModel.GetValue(JobParameters, FlowEngineConst.True);
+                var t = projectModel.GetValue(JobParameters, FlowEngineConst.IfTrue);
                 if (!string.IsNullOrEmpty(t))
                     nextJob = Convert.ToInt64(t);
 
             }
             else
             {
-                var f = projectModel.GetValue(JobParameters, FlowEngineConst.False);
+                var f = projectModel.GetValue(JobParameters, FlowEngineConst.IfFalse);
                 if (!string.IsNullOrEmpty(f))
                     nextJob = Convert.ToInt64(f);
             }

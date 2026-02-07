@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GeneralService } from '../../../../../core/services/general.service';
 import { ProjectService } from '../../../../../core/services/project.service';
 import { CreateProjectCommandInterface } from '../../../../../core/services/interfaces/create-project-command-interface';
@@ -15,10 +15,12 @@ export class CreateProject {
   model: CreateProjectCommandInterface = { projectName: "Test-Project" }
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<CreateProject>,
     private projectService: ProjectService,
     private router: Router,
     private generalService: GeneralService) {
+    this.model.projectName = `Test_Project_${this.data.countProjects + 1}`
   }
 
   close() {
@@ -28,7 +30,7 @@ export class CreateProject {
   save() {
     this.projectService.postApiProjectCreateProject(this.model).subscribe(response => {
       if (this.generalService.isSuccess(response)) {
-        this.router.navigate(['main','projects', this.model.projectName]);
+        this.router.navigate(['main', 'projects', this.model.projectName]);
       }
     })
     this.dialogRef.close();
