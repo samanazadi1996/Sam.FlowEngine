@@ -1,6 +1,8 @@
 ﻿using FlowEngine.Domain.Projects.Constants;
 using FlowEngine.Domain.Projects.Entities;
 using FlowEngine.Infrastructure.Worker.Core.Jobs;
+using System.Net;
+using System.Text.Json;
 
 namespace FlowEngine.Infrastructure.Worker.Seeds
 {
@@ -157,8 +159,8 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
         {
             var nextJobs = new Dictionary<string, string>
             {
-                { "Start","HttpRequest_Authenticate" },
-                { "HttpRequest_Authenticate","HttpRequest_PostJsonRequireAuthorization" },
+                { "Start","Job_HttpRequest_1" },
+                { "Job_HttpRequest_1","Job_HttpRequest_2" },
             };
 
             var project = new Project("Test4")
@@ -175,7 +177,7 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
 
                     new Job_HttpRequest()
                     {
-                        Name="HttpRequest_Authenticate",
+                        Name="Job_HttpRequest_1",
                         Position= new System.Drawing.Point(100,150)
                     }
                     .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Account/Authenticate")
@@ -184,13 +186,13 @@ namespace FlowEngine.Infrastructure.Worker.Seeds
 
                     new Job_HttpRequest()
                     {
-                        Name="HttpRequest_PostJsonRequireAuthorization",
+                        Name="Job_HttpRequest_2",
                         Position= new System.Drawing.Point(100,250)
                     }
                     .UpdateJobParameter(FlowEngineConst.Url,"https://localhost:5001/api/Test/PostJsonRequireAuthorization")
                     .UpdateJobParameter(FlowEngineConst.Method,"Post")
                     .UpdateJobParameter(FlowEngineConst.Body,"{\"Number\": 123456,\"Date\":\"${DateTime.Now}\"}")
-                    .UpdateJobParameter(FlowEngineConst.Headers,"Authorization:bearer ${HttpRequest_Authenticate.Data.data.jwToken}"),
+                    .UpdateJobParameter(FlowEngineConst.Headers, JsonSerializer.Serialize(new {Authorization="bearer ${Job_HttpRequest_1.Data.data.jwToken}"})),
                 ]
             };
 

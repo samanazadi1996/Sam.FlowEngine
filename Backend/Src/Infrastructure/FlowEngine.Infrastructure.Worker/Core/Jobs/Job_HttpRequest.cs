@@ -39,7 +39,7 @@ public sealed class Job_HttpRequest : IJob
 
             if (!string.IsNullOrWhiteSpace(headers))
             {
-                var dicHeadres = JsonSerializer.Deserialize<List<KeyValuePair<string, string>>>(headers);
+                var dicHeadres = JsonSerializer.Deserialize<Dictionary<string, string>>(headers);
                 if (dicHeadres is not null)
                 {
                     foreach (var item in dicHeadres)

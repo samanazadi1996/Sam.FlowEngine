@@ -9,21 +9,30 @@ import { readonly } from '@angular/forms/signals';
 })
 export class JobHttpRequestForm implements OnInit {
   httpMethods = ['Get', 'Post', 'Put', 'Delete', 'Patch', 'Options', 'Head', 'Query', 'Connect', 'Trace',]
-  headers: any[] = []
+  headers: { key: string; value: string; readonly: boolean }[] = [];
 
   @Input() model: any;
 
   ngOnInit(): void {
-    this.headers = (JSON.parse(this.model.jobParameters['Headers']) as any[])
-      .map(x => ({ key: x.Key, value: x.Value, readonly: true }))
+    this.loadHeadersFromDictionary();
+  }
 
+  private loadHeadersFromDictionary() {
+    const headersDict = JSON.parse(this.model.jobParameters['Headers'] ?? '{}');
+
+    // تبدیل دیکشنری به آرایه برای نمایش در رابط کاربری
+    this.headers = Object.entries(headersDict).map(([key, value]) => ({
+      key,
+      value: value as string,
+      readonly: true
+    }));
   }
 
   addHeader() {
     this.headers.push({ key: '', value: '', readonly: false })
     this.onchange()
-
   }
+
   deleteHeader(item: any) {
     this.headers = this.headers.filter(p => p != item)
     this.onchange()
@@ -35,6 +44,14 @@ export class JobHttpRequestForm implements OnInit {
   }
 
   onchange() {
-    this.model.jobParameters['Headers'] = JSON.stringify(this.headers.map(x => ({ Key: x.key, Value: x.value })))
+    const headersDict: { [key: string]: string } = {};
+
+    this.headers.forEach(header => {
+      if (header.key.trim()) {
+        headersDict[header.key] = header.value;
+      }
+    });
+
+    this.model.jobParameters['Headers'] = JSON.stringify(headersDict);
   }
 }
