@@ -51,20 +51,18 @@ public sealed class Job_SqlServer : IJob
         {
             await connection.OpenAsync();
 
-            using (var command = new SqlCommand(query, connection))
-            using (var reader = await command.ExecuteReaderAsync())
+            using var command = new SqlCommand(query, connection);
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                while (await reader.ReadAsync())
+                var row = new Dictionary<string, object>();
+
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    var row = new Dictionary<string, object>();
-
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        row[reader.GetName(i)] = reader.IsDBNull(i) ? null : reader.GetValue(i);
-                    }
-
-                    results.Add(row);
+                    row[reader.GetName(i)] = reader.IsDBNull(i) ? null : reader.GetValue(i);
                 }
+
+                results.Add(row);
             }
         }
 

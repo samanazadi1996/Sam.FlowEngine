@@ -133,6 +133,7 @@ export class ProjectDetails implements OnInit {
       if (job.jobParameters["True"]) listnextJobj.push(job.jobParameters["True"]);
 
       if (job.jobParameters["False"]) listnextJobj?.push(job.jobParameters["False"]);
+      if (job.jobParameters["ForTask"]) listnextJobj?.push(job.jobParameters["ForTask"]);
 
 
       listnextJobj?.forEach(next => {

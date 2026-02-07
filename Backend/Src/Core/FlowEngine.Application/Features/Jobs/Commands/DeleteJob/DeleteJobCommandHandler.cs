@@ -8,7 +8,12 @@ using System.Threading.Tasks;
 
 namespace FlowEnginex.Application.Features.Jobs.Commands.DeleteJob;
 
-public class DeleteJobCommandHandler(IProjectRepository projectRepository, IJobRepository jobRepository, IAuthenticatedUserService authenticatedUser, IUnitOfWork unitOfWork) : IRequestHandler<DeleteJobCommand, BaseResult>
+public class DeleteJobCommandHandler(
+    IProjectRepository projectRepository,
+    IFlowEngineServices flowEngineServices,
+    IJobRepository jobRepository,
+    IAuthenticatedUserService authenticatedUser,
+    IUnitOfWork unitOfWork) : IRequestHandler<DeleteJobCommand, BaseResult>
 {
     public async Task<BaseResult> Handle(DeleteJobCommand request, CancellationToken cancellationToken)
     {
@@ -29,6 +34,8 @@ public class DeleteJobCommandHandler(IProjectRepository projectRepository, IJobR
         jobRepository.Delete(job);
         
         await unitOfWork.SaveChangesAsync();
+
+        await flowEngineServices.LoadData(job.ProjectId);
 
         return BaseResult.Ok();
     }

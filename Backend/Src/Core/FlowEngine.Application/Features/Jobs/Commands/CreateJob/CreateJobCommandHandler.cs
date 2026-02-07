@@ -32,6 +32,8 @@ public class CreateJobCommandHandler(IFlowEngineServices flowEngine, IUnitOfWork
 
         await unitOfWork.SaveChangesAsync();
 
+        await flowEngine.LoadData(job.ProjectId);
+
         return BaseResult.Ok();
     }
 }
