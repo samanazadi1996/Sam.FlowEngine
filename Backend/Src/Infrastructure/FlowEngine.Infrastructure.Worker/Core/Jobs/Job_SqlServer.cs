@@ -36,6 +36,7 @@ public sealed class Job_SqlServer : IJob
 
             ConsoleLogger.Log($"Run SqlServer Query '{query}'");
 
+            await GotoNextJob(projectModel, this.NextJob);
         }
         catch (Exception ex)
         {
@@ -66,13 +67,8 @@ public sealed class Job_SqlServer : IJob
             }
         }
 
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
 
-        return JsonSerializer.Serialize(results, options);
+        return JsonSerializer.Serialize(new { Data = results });
     }
 
 }

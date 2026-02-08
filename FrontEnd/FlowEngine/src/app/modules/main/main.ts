@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { timer, Subscription } from 'rxjs';
+import { AuthenticationService } from '../../core/services/authentication.service';
 
 @Component({
   selector: 'app-main',
@@ -7,12 +8,17 @@ import { timer, Subscription } from 'rxjs';
   templateUrl: './main.html',
   styleUrl: './main.scss',
 })
-export class Main {
+export class Main implements OnInit {
   mobnavigationactive = false;
   lock = false;
   private subscription?: Subscription;
+  profile?: any;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, private authenticationService: AuthenticationService) { }
+  ngOnInit(): void {
+    this.profile = this.authenticationService.getProfile()
+
+  }
 
   @HostListener('document:click')
   onDocumentClick() {
@@ -25,7 +31,7 @@ export class Main {
   openmobnavigationactive() {
     this.mobnavigationactive = true;
     this.lock = true;
-    
+
     this.subscription = timer(100).subscribe(() => {
       this.lock = false;
     });
@@ -36,4 +42,9 @@ export class Main {
       this.subscription.unsubscribe();
     }
   }
+
+  logOut() {
+    this.authenticationService.logout()
+  }
+
 }

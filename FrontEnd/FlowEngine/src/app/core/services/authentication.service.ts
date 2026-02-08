@@ -60,8 +60,17 @@ export class AuthenticationService {
 
     return this.profile.jwToken;
   }
+
   isInRole(role: string) {
     return this.profile.roles.includes(role);
+  }
+  
+  getProfile() {
+    if (!this.profile) {
+      this.logout()
+      return null;
+    }
+    return this.profile;
   }
 
 }

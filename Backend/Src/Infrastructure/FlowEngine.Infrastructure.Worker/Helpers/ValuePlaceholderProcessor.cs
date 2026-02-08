@@ -1,4 +1,5 @@
 ﻿using FlowEngine.Infrastructure.Worker.Core;
+using FlowEngine.Infrastructure.Worker.Core.Jobs;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -34,7 +35,7 @@ public static class ValuePlaceholderProcessor
                         var parts = match.Groups[1].Value.Split('.', StringSplitOptions.RemoveEmptyEntries);
 
                         using var doc = JsonDocument.Parse(data);
-                        var replacement = GetJsonValue(doc.RootElement, [.. parts.Skip(1)]);
+                        var replacement = GetJsonValue(doc.RootElement, [.. parts.Skip(1)], projectModel);
                         temp = temp.Replace(match.Value, replacement);
                     }
                     else if (responseType == DataTypeExtensions.Xml)
@@ -56,7 +57,7 @@ public static class ValuePlaceholderProcessor
 
         return temp;
 
-        string? GetJsonValue(JsonElement element, string[] path)
+        string? GetJsonValue(JsonElement element, string[] path, ProjectModel projectModel)
         {
             JsonElement current = element;
 
@@ -67,8 +68,19 @@ public static class ValuePlaceholderProcessor
                     var idxStart = p.IndexOf('[');
                     var propName = p[..idxStart];
                     var idxStr = p.Substring(idxStart + 1, p.Length - idxStart - 2);
-                    if (!int.TryParse(idxStr, out int index))
-                        return null;
+                    if (!int.TryParse(idxStr, out var index))
+                    {
+                        if (!idxStr.Contains(">"))
+                            return null;
+                        
+                        index = int.Parse(projectModel.GetValue(
+                            new Dictionary<string, string?>()
+                            {
+                            { "Temp","${"+idxStr.Replace(">",".")+"}" }
+                            },
+                            "Temp"));
+
+                    }
 
                     if (!string.IsNullOrEmpty(propName))
                     {
@@ -86,6 +98,7 @@ public static class ValuePlaceholderProcessor
                     {
                         return null;
                     }
+
                 }
                 else
                 {
@@ -146,7 +159,7 @@ public static class ValuePlaceholderProcessor
             var replacements = GetReplacements();
             foreach (var item in replacements)
             {
-                template = template.Replace($"${{{"System."+item.Key}}}", item.Value, StringComparison.OrdinalIgnoreCase);
+                template = template.Replace($"${{{"System." + item.Key}}}", item.Value, StringComparison.OrdinalIgnoreCase);
             }
 
             return template;
