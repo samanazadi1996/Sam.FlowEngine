@@ -63,7 +63,11 @@ public static class ValuePlaceholderProcessor
 
             foreach (var p in path)
             {
-                if (p.EndsWith("]") && p.Contains("["))
+                if (p.Equals("Length()", StringComparison.OrdinalIgnoreCase))
+                {
+                    return current.GetArrayLength() + "";
+                }
+                else if (p.EndsWith("]") && p.Contains("["))
                 {
                     var idxStart = p.IndexOf('[');
                     var propName = p[..idxStart];
@@ -72,7 +76,7 @@ public static class ValuePlaceholderProcessor
                     {
                         if (!idxStr.Contains(">"))
                             return null;
-                        
+
                         index = int.Parse(projectModel.GetValue(
                             new Dictionary<string, string?>()
                             {

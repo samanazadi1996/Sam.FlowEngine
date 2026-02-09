@@ -132,13 +132,19 @@ export class UpdateJob implements OnInit {
     }
 
     if (Array.isArray(value)) {
-      return value.map((item, index) => {
+      var result = [
+        {
+        name: "${"+[...parentPath,"Length()"].join('.')+"}",
+        children:[]
+      }        ,
+      ...value.map((item, index) => {
         const newPath = [...parentPath, `[${index}]`];
         return {
-          name: "${" + newPath.join('.') + "}",
+          name: ("${" + newPath.join('.') + "}").replaceAll(".[", "["),
           children: this.getChild(item, newPath)
         };
-      });
+      })]
+      return result;
     }
 
     return undefined;
