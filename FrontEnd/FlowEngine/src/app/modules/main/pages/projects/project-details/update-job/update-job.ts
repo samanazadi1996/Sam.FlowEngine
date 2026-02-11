@@ -7,8 +7,6 @@ import { IdTitleDtoInterface } from '../../../../../../core/services/interfaces/
 import { ProjectService } from '../../../../../../core/services/project.service';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { getChildElementIndentation } from '@angular/cdk/schematics';
-import { JobStartForm } from './job-start-form/job-start-form';
 
 @Component({
   selector: 'app-update-job',
@@ -132,19 +130,18 @@ export class UpdateJob implements OnInit {
     }
 
     if (Array.isArray(value)) {
-      var result = [
+      return [
         {
-        name: "${"+[...parentPath,"Length()"].join('.')+"}",
-        children:[]
-      }        ,
-      ...value.map((item, index) => {
-        const newPath = [...parentPath, `[${index}]`];
-        return {
-          name: ("${" + newPath.join('.') + "}").replaceAll(".[", "["),
-          children: this.getChild(item, newPath)
-        };
-      })]
-      return result;
+          name: "${" + [...parentPath, "Length()"].join('.') + "}",
+          children: []
+        },
+        ...value.map((item, index) => {
+          const newPath = [...parentPath, `[${index}]`];
+          return {
+            name: ("${" + newPath.join('.') + "}").replaceAll(".[", "["),
+            children: this.getChild(item, newPath)
+          };
+        })]
     }
 
     return undefined;

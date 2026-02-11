@@ -1,5 +1,4 @@
 ﻿using FlowEngine.Infrastructure.Worker.Core;
-using FlowEngine.Infrastructure.Worker.Core.Jobs;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -65,7 +64,15 @@ public static class ValuePlaceholderProcessor
             {
                 if (p.Equals("Length()", StringComparison.OrdinalIgnoreCase))
                 {
-                    return current.GetArrayLength() + "";
+                    if (current.ValueKind == JsonValueKind.Array)
+                        return Convert.ToString(current.GetArrayLength());
+
+                    else if (current.ValueKind == JsonValueKind.String)
+                        return Convert.ToString(current.GetString()?.Length ?? 0);
+
+                    else if (current.ValueKind == JsonValueKind.Number)
+                        return Convert.ToString(current.GetRawText().Length);
+
                 }
                 else if (p.EndsWith("]") && p.Contains("["))
                 {
@@ -74,15 +81,18 @@ public static class ValuePlaceholderProcessor
                     var idxStr = p.Substring(idxStart + 1, p.Length - idxStart - 2);
                     if (!int.TryParse(idxStr, out var index))
                     {
-                        if (!idxStr.Contains(">"))
-                            return null;
-
-                        index = int.Parse(projectModel.GetValue(
+                        //if (!idxStr.Contains(">"))
+                        //    return null;
+                        var temp = projectModel.GetValue(
                             new Dictionary<string, string?>()
                             {
                             { "Temp","${"+idxStr.Replace(">",".")+"}" }
                             },
-                            "Temp"));
+                            "Temp");
+
+                        if (int.TryParse(temp, out var temp2))
+                            index = temp2;
+                        else return null;
 
                     }
 

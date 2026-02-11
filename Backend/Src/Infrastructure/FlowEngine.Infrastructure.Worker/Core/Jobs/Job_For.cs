@@ -28,7 +28,7 @@ public sealed class Job_For : IJob
             var to = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.To));
             var step = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.Step));
 
-            var forTask = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.ForTask));
+            var forTask = int.Parse(projectModel.GetValue(JobParameters, FlowEngineConst.ForTask) ?? "0");
 
             ConsoleLogger.Log($"Run Loop From: {from} To: {to}");
 
