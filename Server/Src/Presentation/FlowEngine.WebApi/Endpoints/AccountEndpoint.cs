@@ -3,6 +3,7 @@ using FlowEngine.Application.Features.Accounts.Commands.Authenticate;
 using FlowEngine.Application.Features.Accounts.Commands.ChangePassword;
 using FlowEngine.Application.Features.Accounts.Commands.ChangeUserName;
 using FlowEngine.Application.Features.Accounts.Commands.Start;
+using FlowEngine.Application.Features.Accounts.Queries.GetProfile;
 using FlowEngine.Application.Interfaces;
 using FlowEngine.Application.Wrappers;
 using FlowEngine.WebApi.Infrastructure.Extensions;
@@ -23,6 +24,8 @@ namespace FlowEngine.WebApi.Endpoints
             builder.MapPut(ChangePassword).RequireAuthorization();
 
             builder.MapPost(Start);
+
+            builder.MapGet(GetProfile).RequireAuthorization();
         }
 
         async Task<BaseResult<AuthenticationResponse>> Authenticate(IMediator mediator, AuthenticateCommand model)
@@ -37,5 +40,9 @@ namespace FlowEngine.WebApi.Endpoints
         async Task<BaseResult<AuthenticationResponse>> Start(IMediator mediator)
             => await mediator.Send<StartCommand, BaseResult<AuthenticationResponse>>(new StartCommand());
 
+
+        async Task<BaseResult<UserDto>> GetProfile(IMediator mediator)
+            => await mediator.Send<GetProfileQuery, BaseResult<UserDto>>(new GetProfileQuery());
     }
+
 }

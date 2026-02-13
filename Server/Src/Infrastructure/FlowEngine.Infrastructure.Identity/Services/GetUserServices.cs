@@ -5,6 +5,7 @@ using FlowEngine.Application.Interfaces.UserInterfaces;
 using FlowEngine.Application.Wrappers;
 using FlowEngine.Infrastructure.Identity.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,6 +26,7 @@ namespace FlowEngine.Infrastructure.Identity.Services
                     PhoneNumber = p.PhoneNumber,
                     Id = p.Id,
                     Created = p.Created,
+                    ProfileImage = p.ProfileImage
                 });
 
             if (!string.IsNullOrEmpty(model.Name))
@@ -38,6 +40,24 @@ namespace FlowEngine.Infrastructure.Identity.Services
                 model.PageNumber,
                 model.PageSize);
 
+        }
+
+        public async Task<UserDto> GetById(Guid userId)
+        {
+            var user = await identityContext.Users
+                .Select(p => new UserDto()
+                {
+                    Name = p.Name,
+                    Email = p.Email,
+                    UserName = p.UserName,
+                    PhoneNumber = p.PhoneNumber,
+                    Id = p.Id,
+                    Created = p.Created,
+                    ProfileImage = p.ProfileImage
+                }).Where(p => p.Id == userId)
+                .FirstOrDefaultAsync();
+
+            return user;
         }
     }
 }

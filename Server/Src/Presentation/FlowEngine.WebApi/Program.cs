@@ -71,8 +71,7 @@ app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseHealthChecks("/health");
 app.MapEndpoints();
 app.UseSerilogRequestLogging();
-
-//app.UseStaticUi();
+app.UseStaticFiles();
 
 app.Run();
 

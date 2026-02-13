@@ -77,7 +77,8 @@ namespace FlowEngine.Infrastructure.Identity.Services
         {
             var user = new ApplicationUser()
             {
-                UserName = GenerateRandomString(7)
+                UserName = GenerateRandomString(7),
+                ProfileImage = RandomHelper.GetProfileImage(),
             };
 
             var identityResult = await userManager.CreateAsync(user);

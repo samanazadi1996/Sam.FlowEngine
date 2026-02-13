@@ -8,4 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FlowEngine.Domain\FlowEngine.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\Accounts\Queries\" />
+  </ItemGroup>
 </Project>

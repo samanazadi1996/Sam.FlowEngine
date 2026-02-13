@@ -7,5 +7,8 @@ namespace FlowEngine.Infrastructure.Identity.Models
     {
         public string Name { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;
+
+        public string ProfileImage { get; set; }
+
     }
 }

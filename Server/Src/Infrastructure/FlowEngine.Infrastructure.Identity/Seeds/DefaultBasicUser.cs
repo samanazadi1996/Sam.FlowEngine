@@ -1,3 +1,4 @@
+using FlowEngine.Application.Helpers;
 using FlowEngine.Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,9 @@ namespace FlowEngine.Infrastructure.Identity.Seeds
                 Name = "Saman",
                 PhoneNumber = "09304241296",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
+                ProfileImage = RandomHelper.GetProfileImage(),
+
             };
 
             if (!await userManager.Users.AnyAsync(p => p.UserName == defaultUser.UserName))
@@ -36,7 +39,8 @@ namespace FlowEngine.Infrastructure.Identity.Seeds
                 Name = "Test",
                 PhoneNumber = "09123654789",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
+                ProfileImage = RandomHelper.GetProfileImage(),
             };
 
             if (!await userManager.Users.AnyAsync(p => p.UserName == defaultUser2.UserName))
