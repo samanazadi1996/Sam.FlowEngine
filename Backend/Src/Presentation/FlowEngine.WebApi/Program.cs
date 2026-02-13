@@ -72,6 +72,8 @@ app.UseHealthChecks("/health");
 app.MapEndpoints();
 app.UseSerilogRequestLogging();
 
+app.UseStaticUi();
+
 app.Run();
 
 public partial class Program

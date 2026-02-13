@@ -1,7 +1,12 @@
-cd ..\FlowEngine\
+@REM @echo off
+mkdir ".\Backend\Src\Presentation\FlowEngine.WebApi\wwwroot"
 
-ng build --configuration production
+@REM cd .\FrontEnd\FlowEngine\
 
-mkdir "..\..\Backend\Src\Presentation\FlowEngine.WebApi\wwwroot\browser"
 
-move ".\dist\FlowEngine\browser" "..\..\Backend\Src\Presentation\FlowEngine.WebApi\browser"
+@REM ng build --configuration production --output-path "..\..\Backend\Src\Presentation\FlowEngine.WebApi\wwwroot\"
+
+
+@REM xcopy ".\dist\FlowEngine\browser\*" "..\..\Backend\Src\Presentation\FlowEngine.WebApi\wwwroot\browser\" /E /I /Y
+
+@REM echo Done!
