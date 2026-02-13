@@ -72,7 +72,7 @@ app.UseHealthChecks("/health");
 app.MapEndpoints();
 app.UseSerilogRequestLogging();
 
-app.UseStaticUi();
+//app.UseStaticUi();
 
 app.Run();
 
