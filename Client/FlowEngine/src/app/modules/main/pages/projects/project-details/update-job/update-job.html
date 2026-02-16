@@ -25,32 +25,7 @@
     </div>
     <div class="d-flex" style="max-height: 70vh;">
         <div class="col-5 overflow-scroll">
-            @if (dataTemplate) {
-            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-                    <li class="mat-tree-node">
-                        <button mat-icon-button disabled></button>
-                        {{node.name}}
-                    </li>
-                </mat-tree-node>
-
-                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-                    <li>
-                        <div class="mat-tree-node">
-                            <button mat-icon-button matTreeNodeToggle>
-                                <mat-icon>
-                                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                                </mat-icon>
-                            </button>
-                            {{node.name}}
-                        </div>
-                        <ul [class.invisible]="!treeControl.isExpanded(node)">
-                            <ng-container matTreeNodeOutlet></ng-container>
-                        </ul>
-                    </li>
-                </mat-nested-tree-node>
-            </mat-tree>
-            }
+            <app-data-template *ngIf="data.projectId" [projectId]="data.projectId"></app-data-template>
         </div>
 
         <div class="col-7 overflow-scroll position-relative">
@@ -61,33 +36,33 @@
                 </div>
 
                 @switch(model.className) {
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Start') {
-                        <app-job-start-form [model]="model"></app-job-start-form>
-                    }
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Timer') {
-                        <app-job-timer-form [model]="model"></app-job-timer-form>
-                    }
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Random') {
-                        <app-job-random-form [model]="model"></app-job-random-form>
-                    }
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_HttpRequest') {
-                        <app-job-http-request-form [model]="model"></app-job-http-request-form>
-                    }
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Sleep') {
-                        <app-job-sleep-form [model]="model"></app-job-sleep-form>
-                    }
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_If') {
-                        <app-job-if-form [model]="model"></app-job-if-form>
-                    }
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_SqlServer') {
-                        <app-job-sql-server-form [model]="model"></app-job-sql-server-form>
-                    }
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_For') {
-                        <app-job-for-form [model]="model"></app-job-for-form>
-                    }
-                    @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Schedule') {
-                        <app-job-schedule-form [model]="model"></app-job-schedule-form>
-                    }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Start') {
+                <app-job-start-form [model]="model"></app-job-start-form>
+                }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Timer') {
+                <app-job-timer-form [model]="model"></app-job-timer-form>
+                }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Random') {
+                <app-job-random-form [model]="model"></app-job-random-form>
+                }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_HttpRequest') {
+                <app-job-http-request-form [model]="model"></app-job-http-request-form>
+                }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Sleep') {
+                <app-job-sleep-form [model]="model"></app-job-sleep-form>
+                }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_If') {
+                <app-job-if-form [model]="model"></app-job-if-form>
+                }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_SqlServer') {
+                <app-job-sql-server-form [model]="model"></app-job-sql-server-form>
+                }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_For') {
+                <app-job-for-form [model]="model"></app-job-for-form>
+                }
+                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Schedule') {
+                <app-job-schedule-form [model]="model"></app-job-schedule-form>
+                }
                 }
 
                 @if (projectJobs) {

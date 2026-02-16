@@ -19,6 +19,7 @@ import { JobIfForm } from './pages/projects/project-details/update-job/job-if-fo
 import { JobSqlServerForm } from './pages/projects/project-details/update-job/job-sql-server-form/job-sql-server-form';
 import { JobForForm } from './pages/projects/project-details/update-job/job-for-form/job-for-form';
 import { JobScheduleForm } from './pages/projects/project-details/update-job/job-schedule-form/job-schedule-form';
+import { DataTemplate } from './pages/projects/project-details/data-template/data-template';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { JobScheduleForm } from './pages/projects/project-details/update-job/job
     JobSqlServerForm,
     JobForForm,
     JobScheduleForm,
+    DataTemplate,
   ],
   imports: [
     CommonModule,

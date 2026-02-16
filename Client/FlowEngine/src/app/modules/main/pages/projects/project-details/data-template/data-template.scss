@@ -1,0 +1,17 @@
+    .invisible {
+        display: none;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 20px;
+    }
+
+    .mat-tree {
+        background-color: unset !important;
+    }
+
+    .mat-tree-node,
+    .mat-nested-tree-node {
+        color: unset !important;
+    }

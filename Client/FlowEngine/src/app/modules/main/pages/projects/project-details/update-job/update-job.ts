@@ -5,8 +5,6 @@ import { ProjectJobDtoInterface } from '../../../../../../core/services/interfac
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IdTitleDtoInterface } from '../../../../../../core/services/interfaces/id-title-dto-interface';
 import { ProjectService } from '../../../../../../core/services/project.service';
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
 
 @Component({
   selector: 'app-update-job',
@@ -16,41 +14,22 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 })
 export class UpdateJob implements OnInit {
 
-  treeControl = new NestedTreeControl<TreeNode>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<TreeNode>();
-
   model?: ProjectJobDtoInterface;
   projectJobs?: IdTitleDtoInterface[];
-  dataTemplate: any[] = [];
   constructor(
     private dialogRef: MatDialogRef<UpdateJob>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private cdr: ChangeDetectorRef,
     private jobService: JobService,
-    private projectService: ProjectService,
     private generalService: GeneralService) {
   }
 
-  hasChild = (_: number, node: TreeNode) =>
-    !!node.children && node.children.length > 0;
 
   ngOnInit(): void {
     this.loadData()
   }
 
-  loadData() {
-    this.projectService.getApiProjectGetProjectDataTemplate(this.data.projectId)
-      .subscribe(response => {
-        if (this.generalService.isSuccess(response)) {
-          if (response.data) {
-            for (const [key, value] of Object.entries(response.data)) {
-              this.dataTemplate.push({ key: key, value: String(value) });
-            }
-          }
-          this.loadDataTemplate()
-          this.cdr.detectChanges();
-        }
-      })
+  loadData() {  
     this.jobService.getApiJobGetAllJobsByProjectId(this.data.projectId)
       .subscribe(response => {
         if (this.generalService.isSuccess(response)) {
@@ -95,60 +74,6 @@ export class UpdateJob implements OnInit {
     });
   }
 
-  loadDataTemplate() {
-    this.dataSource.data = []
-    this.dataTemplate.forEach(item => {
-      this.dataSource.data.push({
-        name: "${" + item.key + "}",
-        children: this.getChild(item.value, [item.key])
-      })
-    });
-  }
-
-
-
-  getChild(value: any, parentPath: string[] = []): TreeNode[] | undefined {
-    if (typeof value === 'string') {
-      try {
-        value = JSON.parse(value);
-      } catch {
-        return undefined;
-      }
-    }
-    if (value == null) {
-      return undefined;
-    }
-
-    if (typeof value === 'object' && !Array.isArray(value)) {
-      return Object.entries(value).map(([key, val]) => {
-        const newPath = [...parentPath, key];
-        return {
-          name: "${" + newPath.join('.') + "}",
-          children: this.getChild(val, newPath)
-        };
-      });
-    }
-
-    if (Array.isArray(value)) {
-      return [
-        {
-          name: "${" + [...parentPath, "Length()"].join('.') + "}",
-          children: []
-        },
-        ...value.map((item, index) => {
-          const newPath = [...parentPath, `[${index}]`];
-          return {
-            name: ("${" + newPath.join('.') + "}").replaceAll(".[", "["),
-            children: this.getChild(item, newPath)
-          };
-        })]
-    }
-
-    return undefined;
-  }
-
-
-
   delete() {
     this.jobService.deleteApiJobDeleteJob(this.model!.id).subscribe(response => {
       if (this.generalService.isSuccess(response)) {
@@ -157,13 +82,5 @@ export class UpdateJob implements OnInit {
     });
   }
 
-
-
-
-}
-
-interface TreeNode {
-  name: string;
-  children?: TreeNode[];
 }
 

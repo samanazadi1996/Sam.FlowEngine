@@ -1,0 +1,35 @@
+@if (dataSource.data && dataSource.data.length > 0) {
+
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <mat-nested-tree-node *matTreeNodeDef="let node">
+        <li class="mat-tree-node">
+            <button mat-icon-button disabled></button>
+            {{node.name}}
+        </li>
+    </mat-nested-tree-node>
+
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <li>
+            <div class="mat-tree-node">
+                <button mat-icon-button matTreeNodeToggle>
+                    <mat-icon>
+                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                    </mat-icon>
+                </button>
+                {{node.name}}
+            </div>
+            <ul [class.invisible]="!treeControl.isExpanded(node)">
+                <ng-container matTreeNodeOutlet></ng-container>
+            </ul>
+        </li>
+    </mat-nested-tree-node>
+</mat-tree>
+
+}@else
+{
+
+<div class="text-center h-100 align-content-around">
+    <img src="/loading.gif" alt="" class="w-25 cursor-pointer" (click)="loadData()">
+</div>
+
+}
