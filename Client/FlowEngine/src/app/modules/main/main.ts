@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { timer, Subscription } from 'rxjs';
 import { AuthenticationService } from '../../core/services/authentication.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-main',
@@ -9,6 +10,13 @@ import { AuthenticationService } from '../../core/services/authentication.servic
   styleUrl: './main.scss',
 })
 export class Main implements OnInit {
+  getUserAvtar() {
+    var profileImage = this.authenticationService.getProfileImage()
+
+    return String(profileImage).includes('.jpg') ?
+      `${environment.serverUrl}/profile-images/${profileImage}` :
+      profileImage
+  }
   mobnavigationactive = false;
   lock = false;
   private subscription?: Subscription;
@@ -17,7 +25,6 @@ export class Main implements OnInit {
   constructor(private cdr: ChangeDetectorRef, private authenticationService: AuthenticationService) { }
   ngOnInit(): void {
     this.profile = this.authenticationService.getProfile()
-
   }
 
   @HostListener('document:click')

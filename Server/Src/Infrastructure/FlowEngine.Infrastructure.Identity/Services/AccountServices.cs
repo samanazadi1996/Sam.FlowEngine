@@ -113,6 +113,7 @@ namespace FlowEngine.Infrastructure.Identity.Services
                 UserName = user.UserName,
                 Roles = rolesList,
                 IsVerified = user.EmailConfirmed,
+                ProfileImage = user.ProfileImage,
             };
 
             async Task<JwtSecurityToken> GenerateJwtToken()

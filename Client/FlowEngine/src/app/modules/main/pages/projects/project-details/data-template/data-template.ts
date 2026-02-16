@@ -38,7 +38,8 @@ export class DataTemplate implements OnInit {
               var val = String(value);
               treeData.push({
                 name: "${" + key + "}",
-                children: this.getChild(val, [key])
+                children: this.getChild(val, [key]),
+                value: String(val)
               });
             }
 
@@ -51,7 +52,17 @@ export class DataTemplate implements OnInit {
         }
       });
   }
+  private getValue(data: any) {
+    try {
+      return JSON.stringify(data)
+    } catch (error) { }
+    
+    try {
+      return String(data);
+    } catch (error) { }
 
+    return '';
+  }
 
   getChild(value: any, parentPath: string[] = []): TreeNode[] | undefined {
     if (typeof value === 'string') {
@@ -69,8 +80,9 @@ export class DataTemplate implements OnInit {
       return Object.entries(value).map(([key, val]) => {
         const newPath = [...parentPath, key];
         return {
-          name: "${" + newPath.join('.') + "}",
-          children: this.getChild(val, newPath)
+          name: ("${" + newPath.join('.') + "}").replaceAll(".[", "["),
+          children: this.getChild(val, newPath),
+          value: this.getValue(val)
         };
       });
     }
@@ -79,13 +91,15 @@ export class DataTemplate implements OnInit {
       return [
         {
           name: "${" + [...parentPath, "Length()"].join('.') + "}",
-          children: []
+          children: [],
+          value: this.getValue(value?.length)
         },
         ...value.map((item, index) => {
           const newPath = [...parentPath, `[${index}]`];
           return {
             name: ("${" + newPath.join('.') + "}").replaceAll(".[", "["),
-            children: this.getChild(item, newPath)
+            children: this.getChild(item, newPath),
+            value: this.getValue(value)
           };
         })]
     }
@@ -100,6 +114,7 @@ export class DataTemplate implements OnInit {
 }
 interface TreeNode {
   name: string;
+  value?: string;
   children?: TreeNode[];
 }
 
