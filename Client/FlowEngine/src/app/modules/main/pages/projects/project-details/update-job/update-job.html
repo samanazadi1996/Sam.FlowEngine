@@ -36,31 +36,31 @@
                 </div>
 
                 @switch(model.className) {
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Start') {
+                @case(jobName('Job_Start')) {
                 <app-job-start-form [model]="model"></app-job-start-form>
                 }
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Timer') {
+                @case(jobName('Job_Timer')) {
                 <app-job-timer-form [model]="model"></app-job-timer-form>
                 }
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Random') {
+                @case(jobName('Job_Random')) {
                 <app-job-random-form [model]="model"></app-job-random-form>
                 }
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_HttpRequest') {
+                @case(jobName('Job_HttpRequest')) {
                 <app-job-http-request-form [model]="model"></app-job-http-request-form>
                 }
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Sleep') {
+                @case(jobName('Job_Sleep')) {
                 <app-job-sleep-form [model]="model"></app-job-sleep-form>
                 }
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_If') {
+                @case(jobName('Job_If')) {
                 <app-job-if-form [model]="model"></app-job-if-form>
                 }
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_SqlServer') {
+                @case(jobName('Job_SqlServer')) {
                 <app-job-sql-server-form [model]="model"></app-job-sql-server-form>
                 }
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_For') {
+                @case(jobName('Job_For')) {
                 <app-job-for-form [model]="model"></app-job-for-form>
                 }
-                @case('FlowEngine.Infrastructure.Worker.Core.Jobs.Job_Schedule') {
+                @case(jobName('Job_Schedule')) {
                 <app-job-schedule-form [model]="model"></app-job-schedule-form>
                 }
                 }

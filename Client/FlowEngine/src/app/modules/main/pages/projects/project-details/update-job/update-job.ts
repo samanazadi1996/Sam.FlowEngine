@@ -29,7 +29,7 @@ export class UpdateJob implements OnInit {
     this.loadData()
   }
 
-  loadData() {  
+  loadData() {
     this.jobService.getApiJobGetAllJobsByProjectId(this.data.projectId)
       .subscribe(response => {
         if (this.generalService.isSuccess(response)) {
@@ -81,6 +81,9 @@ export class UpdateJob implements OnInit {
       }
     });
   }
-
+  
+  jobName(name: string) {
+    return `FlowEngine.Infrastructure.Worker.Core.Jobs.${name}`
+  }
 }
 
